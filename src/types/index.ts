@@ -1,0 +1,1 @@
+export type PageID = 'home' | 'blog';

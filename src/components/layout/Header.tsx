@@ -22,8 +22,8 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 md:z-50 w-full bg-white/90 dark:bg-slate-950/90 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800 px-4 h-14 flex items-center">
-        <div className="mx-auto flex items-center justify-between gap-3 w-full px-2 md:px-6">
+      <header className="sticky top-0 z-40 md:z-50 w-full bg-white/90 dark:bg-slate-950/90 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800 h-14 flex items-center">
+        <div className="mx-auto flex items-center justify-between gap-3 w-full px-8">
           
           <Button 
             variant="ghost" 

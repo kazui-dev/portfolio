@@ -15,9 +15,9 @@ const XIcon = ({ className }: { className?: string }) => (
 export default function Footer() {
   return (
     <footer className="w-full bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 md:pl-64 mt-auto">
-      <div className="mx-auto w-full px-4 md:px-6 py-4 flex flex-row items-center justify-end gap-6">
+      <div className="mx-auto w-full px-8 py-4 flex flex-row items-center justify-end gap-5">
         
-        <div className="flex items-center gap-4 text-slate-400">
+        <div className="flex items-center gap-3 text-slate-400">
           <a 
             href="https://github.com/kazui-dev" 
             target="_blank" 

@@ -125,6 +125,7 @@
   }
   html {
     scroll-behavior: smooth;
+    scrollbar-gutter: stable;
   }
   section {
     scroll-margin-top: 4rem;

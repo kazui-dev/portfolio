@@ -1,20 +1,15 @@
 import { useState, type MouseEvent } from 'react';
 import { Link } from '@tanstack/react-router';
-import { House, NotebookText, Menu as MenuIcon, Sun, MoonStar, Smartphone, Check } from "lucide-react";
+import { House, NotebookText, Menu as MenuIcon } from "lucide-react";
 import { Button } from '@/components/ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { useTheme } from '@/lib/theme';
 import { useScrollStore } from '@/store/useScrollStore';
+import ThemeSelector from './ThemeSelector';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const { theme, resolvedTheme, setTheme } = useTheme();
-
   const clearScrollPosition = useScrollStore(state => state.clearScrollPosition);
 
-  const closeMenu = () => {
-    setIsOpen(false);
-  };
+  const closeMenu = () => setIsOpen(false);
 
   const handleLogoClick = (event: MouseEvent<HTMLAnchorElement>) => {
     if (window.location.pathname === '/') {
@@ -27,14 +22,14 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full bg-slate-50/90 dark:bg-slate-950/90 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800 px-4 py-2">
-        <div className="max-w-md mx-auto flex items-center justify-between gap-3">
+      <header className="sticky top-0 z-40 md:z-50 w-full bg-white/90 dark:bg-slate-950/90 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800 px-4 h-14 flex items-center">
+        <div className="mx-auto flex items-center justify-between gap-3 w-full px-2 md:px-6">
           
           <Button 
             variant="ghost" 
             size="icon" 
             onClick={() => setIsOpen(true)}
-            className="h-9 w-9 p-0 hover:bg-slate-200/50 active:bg-slate-200/50 dark:hover:bg-slate-800/50 dark:active:bg-slate-800/50 [&_svg]:size-5"
+            className="h-9 w-9 p-0 hover:bg-slate-200/50 active:bg-slate-200/50 dark:hover:bg-slate-800/50 dark:active:bg-slate-800/50 md:hidden [&_svg]:size-5 shrink-0"
           >
             <MenuIcon className="text-slate-700 dark:text-slate-300" />
           </Button>
@@ -48,9 +43,10 @@ export default function Header() {
               kazui.dev
             </Link>
           </h1>
-          
-          <div className="w-24 sm:w-28 shrink-0">
-            <nav className="grid w-full grid-cols-2 h-9 p-1 bg-slate-200/50 dark:bg-slate-800/50 rounded-md text-slate-500 dark:text-slate-400">
+          <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+            <ThemeSelector />
+
+            <nav className="grid w-24 sm:w-28 grid-cols-2 h-9 p-1 bg-slate-200/50 dark:bg-slate-800/50 rounded-md text-slate-500 dark:text-slate-400">
               <Link
                 to="/"
                 className="inline-flex items-center justify-center whitespace-nowrap rounded-sm h-full px-0 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 hover:text-slate-700 dark:hover:text-slate-200"
@@ -75,7 +71,7 @@ export default function Header() {
       </header>
 
       <div
-        className={`fixed inset-0 bg-black/40 z-50 transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black/40 z-50 transition-opacity duration-300 md:hidden ${
           isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
         onClick={closeMenu}
@@ -84,7 +80,7 @@ export default function Header() {
       />
 
       <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-white dark:bg-slate-950 shadow-2xl z-50 transition-transform duration-300 ease-in-out flex flex-col ${
+        className={`fixed top-0 md:top-14 left-0 h-full md:h-[calc(100vh-3.5rem)] w-64 bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 z-50 md:z-40 transition-transform duration-300 ease-in-out flex flex-col md:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -111,37 +107,6 @@ export default function Header() {
               <NotebookText size={18} className="text-slate-600 dark:text-slate-300" />
               Blog
             </Link>
-          </div>
-
-          <div className="px-4 pt-2 pb-4 mt-auto">
-            <div className="h-px bg-slate-200 dark:bg-slate-700 mt-0 mb-2" />
-            <Popover>
-              <PopoverTrigger asChild>
-                <button type="button" className="w-full flex items-center gap-1.5 px-4 py-3 rounded-lg hover:bg-slate-100 active:bg-slate-100 dark:hover:bg-slate-800 dark:active:bg-slate-800 transition-colors text-slate-800 dark:text-slate-200 text-sm font-medium">
-                  {resolvedTheme === 'dark' ? <><MoonStar size={18} className="text-slate-600 dark:text-slate-300" />ダークモード</> : <><Sun size={18} className="text-slate-600 dark:text-slate-300" />ライトモード</>}
-                </button>
-              </PopoverTrigger>
-              <PopoverContent className="w-56 p-2 z-60" side="top" align="start">
-                <div className="space-y-1">
-                  {[
-                    { themeValue: 'light' as const, icon: Sun, label: 'ライトモード' },
-                    { themeValue: 'dark' as const, icon: MoonStar, label: 'ダークモード' },
-                    { themeValue: 'system' as const, icon: Smartphone, label: '端末の設定を使う' },
-                  ].map(({ themeValue, icon: Icon, label }) => (
-                    <button
-                      key={themeValue}
-                      onClick={() => setTheme(themeValue)}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md hover:bg-slate-100 active:bg-slate-100 dark:hover:bg-slate-800 dark:active:bg-slate-800 transition-colors"
-                      aria-current={theme === themeValue ? 'true' : undefined}
-                    >
-                      <Icon size={18} className="text-slate-600 dark:text-slate-300" />
-                      <span className="text-sm font-medium text-slate-800 dark:text-slate-200 flex-1 text-left">{label}</span>
-                      {theme === themeValue && <Check size={16} className="text-slate-600 dark:text-slate-300" />}
-                    </button>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
           </div>
         </div>
       </aside>

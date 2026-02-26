@@ -1,1 +1,1 @@
-export type PageID = 'home' | 'blog';
+export type PageID = 'home' | 'notes';

@@ -50,19 +50,19 @@ export const PAGE_METADATA: Record<PageID, PageMetadata> = {
       ]
     }
   },
-  blog: {
-    title: `Blog - ${SITE_NAME}`,
-    ogTitle: `Blog - ${SITE_NAME}`,
-    ogDescription: `Blog - ${SITE_NAME}`,
-    description: `Blog - ${SITE_NAME}`,
+  notes: {
+    title: `Notes - ${SITE_NAME}`,
+    ogTitle: `Notes - ${SITE_NAME}`,
+    ogDescription: `Notes - ${SITE_NAME}`,
+    description: `Notes - ${SITE_NAME}`,
     jsonLd: {
       "@context": "https://schema.org",
       "@graph": [
         {
           "@type": "WebSite",
-          "name": `Blog - ${SITE_NAME}`,
-          "url": `${SITE_URL}/blog`,
-          "description": `Blog - ${SITE_NAME}`,
+          "name": `Notes - ${SITE_NAME}`,
+          "url": `${SITE_URL}/notes`,
+          "description": `Notes - ${SITE_NAME}`,
           "inLanguage": "ja",
         },
         {
@@ -77,8 +77,8 @@ export const PAGE_METADATA: Record<PageID, PageMetadata> = {
             {
               "@type": "ListItem",
               "position": 2,
-              "name": "Blog",
-              "item": `${SITE_URL}/blog`
+              "name": "Notes",
+              "item": `${SITE_URL}/notes`
             }
           ]
         }

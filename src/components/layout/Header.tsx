@@ -57,11 +57,11 @@ export default function Header() {
                 <House size={16} />
               </Link>
               <Link
-                to="/blog"
+                to="/notes"
                 className="inline-flex items-center justify-center whitespace-nowrap rounded-sm h-full px-0 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 hover:text-slate-700 dark:hover:text-slate-200"
                 activeProps={{ className: 'bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-50' }}
                 activeOptions={{ exact: false, includeSearch: false }}
-                aria-label="Blog"
+                aria-label="Notes"
               >
                 <NotebookText size={16} />
               </Link>
@@ -98,14 +98,14 @@ export default function Header() {
             </Link>
 
             <Link
-              to="/blog"
+              to="/notes"
               onClick={closeMenu}
               className="w-full mb-2 flex items-center gap-2.5 px-4 py-3 rounded-lg transition-colors text-sm font-medium hover:bg-slate-100 active:bg-slate-100 dark:hover:bg-slate-800 dark:active:bg-slate-800 text-slate-800 dark:text-slate-200"
               activeProps={{ className: 'bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200' }}
               activeOptions={{ exact: false, includeSearch: false }}
             >
               <NotebookText size={18} className="text-slate-600 dark:text-slate-300" />
-              Blog
+              Notes
             </Link>
           </div>
         </div>

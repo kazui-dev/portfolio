@@ -1,31 +1,56 @@
+import { User } from "lucide-react";
+
+const Badge = ({ children }: { children: React.ReactNode }) => (
+  <span className="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-full text-xs font-semibold tracking-wide">
+    {children}
+  </span>
+);
+
 export default function Home() {
-    return (
-        <>
-            <h1 className="text-4xl font-bold mb-4">Welcome to My Portfolio</h1> 
-            <p className="text-lg text-gray-700 dark:text-gray-300">
-                This is the home page of my portfolio. Here you can find information about me, my projects, and how to contact me.
-            </p>
-            <section className="mt-8">
-                <h2 className="text-2xl font-semibold mb-2">About Me</h2>
-                <p className="text-gray-700 dark:text-gray-300">
-                    I am a passionate developer with experience in building web applications using modern technologies. I enjoy learning new things and taking on challenging projects.
-                </p>
-            </section>
-            <section className="mt-8">
-                <h2 className="text-2xl font-semibold mb-2">Projects</h2>
-                <ul className="list-disc list-inside text-gray-700 dark:text-gray-300">
-                    <li><a href="/projects/project1" className="text-blue-500 hover:underline">Project 1</a> - A web application for managing tasks.</li>
-                    <li><a href="/projects/project2" className="text-blue-500 hover:underline">Project 2</a> - A mobile app for tracking fitness activities.</li>
-                    <li><a href="/projects/project3" className="text-blue-500 hover:underline">Project 3</a> - An open-source library for data visualization.</li>
-                </ul>
-            </section>
-            <section className="mt-8">
-                <h2 className="text-2xl font-semibold mb-2">Contact</h2>
-                <p className="text-gray-700 dark:text-gray-300">
-                    Feel free to reach out to me via email at <a href="mailto:kazui@example.com" className="text-blue-500 hover:underline">kazui@example.com</a>
-                    or connect with me on <a href="https://www.linkedin.com/in/kazui" className="text-blue-500 hover:underline">LinkedIn</a>.
-                </p>
-            </section>
-        </>
-    )
+  return (
+    <div className="space-y-16">
+      <section className="flex flex-col-reverse md:flex-row items-start md:items-center justify-between gap-8 md:gap-12">
+        
+        <div className="flex-1 space-y-5">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight">
+            Hi, I'm Kazui
+          </h1>
+          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
+            情報科高校に通う学生です。<br />
+            Web技術が好きで、フロントエンド開発やデザインに興味があります。
+          </p>
+          
+          <div className="flex flex-wrap gap-2 pt-2">
+            <Badge>TypeScript</Badge>
+            <Badge>React</Badge>
+            <Badge>Vite</Badge>
+            <Badge>TanStack Start</Badge>
+            <Badge>Tailwind CSS</Badge>
+            <Badge>Tauri</Badge>
+            <Badge>Electron</Badge>
+          </div>
+        </div>
+
+        <div className="shrink-0">
+          <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm">
+            {/* <img src="/avatar.jpg" alt="Kazui" className="w-full h-full object-cover" /> */}
+            <User size={48} className="text-slate-400 dark:text-slate-500" />
+          </div>
+        </div>
+      </section>
+
+      <section className="space-y-6">
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50 tracking-tight border-b border-slate-200 dark:border-slate-800 pb-2">
+          Recent Notes
+        </h2>
+        
+        <div className="py-16 text-center bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800 border-dashed">
+          <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
+            投稿はまだありません。
+          </p>
+        </div>
+      </section>
+
+    </div>
+  );
 }

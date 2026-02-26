@@ -1,5 +1,5 @@
 import { User, ArrowRight } from "lucide-react";
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 
 const DUMMY_NOTES = [
   { slug: 'tanstack-start-portfolio', title: 'TanStack Startでポートフォリオを作り始めた', publishedAt: new Date('2026-02-26'), tags: ['React', 'TanStack'] },
@@ -14,6 +14,7 @@ const Badge = ({ children }: { children: React.ReactNode }) => (
 );
 
 export default function Home() {
+  const navigate = useNavigate();
   return (
     <div className="space-y-16">
       <section className="flex flex-col-reverse md:flex-row items-start md:items-center justify-between gap-8 md:gap-12">
@@ -58,35 +59,37 @@ export default function Home() {
         
         <div className="flex flex-col">
           {DUMMY_NOTES.map((note) => (
-            <Link 
+            <div 
               key={note.slug}
-              to="/notes/$slug"
-              params={{ slug: note.slug }}
-              className="group py-4 sm:py-5 flex flex-col gap-2 border-b border-slate-200 dark:border-slate-800 last:border-0 hover:bg-slate-50/50 dark:hover:bg-slate-900/50 sm:hover:bg-transparent transition-colors -mx-4 px-4 sm:mx-0 sm:px-2 rounded-lg sm:rounded-none"
+              className="group relative py-4 sm:py-5 flex flex-col gap-2 border-b border-slate-200 dark:border-slate-800 last:border-0 hover:bg-slate-50/50 dark:hover:bg-slate-900/50 sm:hover:bg-transparent transition-colors -mx-4 px-4 sm:mx-0 sm:px-2 rounded-lg sm:rounded-none"
             >
               <div className="flex flex-wrap items-center gap-y-2">
                 <time className="text-sm font-medium text-slate-500 dark:text-slate-400 w-24 shrink-0">
                   {note.publishedAt.toLocaleDateString('ja-JP').replace(/\//g, '.')}
                 </time>
                 
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 relative z-10">
                   {note.tags.map(tag => (
-                    <Link 
+                    <button 
                       key={tag} 
-                      to="/notes"
-                      search={{ tag: tag }}
-                      className="text-[11px] font-bold tracking-wider text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2.5 py-0.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate({ to: '/notes', search: { tag: tag } });
+                      }}
+                      className="text-[10px] font-bold tracking-wider text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2.5 py-0.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors focus:outline-none"
                     >
                       #{tag}
-                    </Link>
+                    </button>
                   ))}
                 </div>
               </div>
               
               <h3 className="text-base sm:text-lg font-medium text-slate-800 dark:text-slate-200 group-hover:text-slate-500 dark:group-hover:text-slate-400 transition-colors">
-                {note.title}
+                <Link to="/notes/$slug" params={{ slug: note.slug }} className="before:absolute before:inset-0">
+                  {note.title}
+                </Link>
               </h3>
-            </Link>
+            </div>
           ))}
         </div>
       </section>

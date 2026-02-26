@@ -1,28 +1,22 @@
+import { cn } from "@/lib/utils";
 import { useState, useMemo } from 'react';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { X, Filter, ArrowUpDown } from 'lucide-react';
 import { Select } from '@/components/ui/select';
+import type { Note } from '@/db/schema';
 
-const DUMMY_NOTES = [
-  { slug: 'tanstack-start-portfolio', title: 'TanStack Startでポートフォリオを作り始めた', publishedAt: new Date('2026-02-26'), tags: ['React', 'TanStack'] },
-  { slug: 'tailwind-spacing-tips', title: 'Tailwind CSSで心地よい余白を作るコツ', publishedAt: new Date('2026-02-20'), tags: ['Design', 'CSS'] },
-  { slug: 'd1-drizzle-setup', title: 'Cloudflare D1とDrizzle ORMの環境構築', publishedAt: new Date('2026-02-15'), tags: ['Database', 'D1'] },
-  { slug: 'react-server-components', title: 'RSCの概念を分かりやすく図解してみた', publishedAt: new Date('2026-02-10'), tags: ['React'] },
-  { slug: 'vscode-shortcuts', title: '開発効率が劇的に上がるVSCodeショートカット', publishedAt: new Date('2026-02-05'), tags: ['Tool'] },
-];
-
-export default function Notes({ selectedTag }: { selectedTag?: string | string[] }) {
+export default function Notes({ selectedTag, initialNotes }: { selectedTag?: string, initialNotes?: Note[] }) {
   const navigate = useNavigate({ from: '/notes/' });
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
 
   const currentTags = useMemo(() => {
     if (!selectedTag) return [];
-    return Array.isArray(selectedTag) ? selectedTag : [selectedTag];
+    return selectedTag.split('-').filter(Boolean);
   }, [selectedTag]);
 
   const allTags = useMemo(() => {
-    return Array.from(new Set(DUMMY_NOTES.flatMap(note => note.tags)));
-  }, []);
+    return Array.from(new Set(initialNotes?.flatMap(note => note.tags) || []));
+  }, [initialNotes]);
 
   const tagOptions = useMemo(() => {
     return [
@@ -37,28 +31,29 @@ export default function Notes({ selectedTag }: { selectedTag?: string | string[]
   ];
 
   const processedNotes = useMemo(() => {
+    if (!initialNotes) return [];
     const filtered = currentTags.length > 0 
-      ? DUMMY_NOTES.filter(n => currentTags.every(t => n.tags.includes(t))) 
-      : DUMMY_NOTES;
+      ? initialNotes.filter(n => currentTags.every(t => n.tags.includes(t))) 
+      : initialNotes;
     
     return [...filtered].sort((a, b) => {
-      const timeA = a.publishedAt.getTime();
-      const timeB = b.publishedAt.getTime();
+      const timeA = a.publishedAt?.getTime() || 0;
+      const timeB = b.publishedAt?.getTime() || 0;
       return sortOrder === 'desc' ? timeB - timeA : timeA - timeB;
     });
-  }, [currentTags, sortOrder]);
+  }, [currentTags, sortOrder, initialNotes]);
 
   const handleTagChange = (values: string[]) => {
     if (values.includes('all') || values.length === 0) {
       navigate({ search: { tag: undefined } });
     } else {
-      navigate({ search: { tag: values } });
+      navigate({ search: { tag: values.join('-') } });
     }
   };
 
   const removeTag = (tagToRemove: string) => {
     const newTags = currentTags.filter(t => t !== tagToRemove);
-    navigate({ search: { tag: newTags.length > 0 ? newTags : undefined } });
+    navigate({ search: { tag: newTags.length > 0 ? newTags.join('-') : undefined } });
   };
 
   return (
@@ -68,7 +63,7 @@ export default function Notes({ selectedTag }: { selectedTag?: string | string[]
           Notes
         </h1>
         <p className="text-slate-600 dark:text-slate-400">
-            技術的な内容から日常の発見まで、幅広く書いていきます。
+          技術的な活動や学びを記録していきます。
         </p>
       </div>
 
@@ -98,11 +93,14 @@ export default function Notes({ selectedTag }: { selectedTag?: string | string[]
           <div className="flex flex-wrap items-center gap-2 ml-1 sm:ml-2">
             <span className="text-sm font-medium text-slate-500">Filtered by:</span>
             {currentTags.map(tag => (
-              <span key={tag} className="inline-flex items-center gap-1 text-[11px] font-bold tracking-wider text-slate-600 dark:text-slate-300 bg-slate-200 dark:bg-slate-800 px-2.5 py-0.5 rounded-full">
+              <span 
+                key={tag} 
+                className="inline-flex items-center gap-1 text-[10px] font-bold tracking-wider px-2.5 py-0.5 rounded-full bg-slate-700 text-slate-50 dark:bg-slate-200 dark:text-slate-900"
+              >
                 #{tag}
                 <button 
                   onClick={() => removeTag(tag)}
-                  className="hover:text-slate-900 dark:hover:text-slate-100 ml-0.5 focus:outline-none"
+                  className="ml-0.5 focus:outline-none hover:text-red-300 dark:hover:text-red-600 transition-colors"
                   aria-label={`Remove ${tag} filter`}
                 >
                   <X size={12} />
@@ -121,9 +119,10 @@ export default function Notes({ selectedTag }: { selectedTag?: string | string[]
               className="group relative flex flex-col justify-between p-4 sm:p-5 bg-white dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-sm transition-all h-full"
             >
               <div className="space-y-2 mb-4">
-                <time className="text-[11px] sm:text-xs font-medium text-slate-500 dark:text-slate-400">
-                  {note.publishedAt.toLocaleDateString('ja-JP').replace(/\//g, '.')}
-                </time>
+                <time className="text-[10px] sm:text-xs font-medium text-slate-500 dark:text-slate-400">
+                  {note.publishedAt 
+                    ? note.publishedAt.toLocaleDateString('ja-JP').replace(/\//g, '.') 
+                    : '未公開'}                </time>
                 <h2 className="text-sm sm:text-base font-bold text-slate-800 dark:text-slate-200 group-hover:text-slate-500 dark:group-hover:text-slate-400 transition-colors line-clamp-3">
                   <Link to="/notes/$slug" params={{ slug: note.slug }} className="before:absolute before:inset-0">
                     {note.title}
@@ -132,7 +131,9 @@ export default function Notes({ selectedTag }: { selectedTag?: string | string[]
               </div>
 
               <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-auto pt-3 border-t border-slate-100 dark:border-slate-800/50 relative z-10">
-                {note.tags.map(tag => (
+                {note.tags.map(tag => {
+                  const isSelected = currentTags.includes(tag);
+                  return (
                   <button 
                     key={tag}
                     onClick={(e) => {
@@ -140,14 +141,19 @@ export default function Notes({ selectedTag }: { selectedTag?: string | string[]
                       if (currentTags.includes(tag)) {
                         removeTag(tag);
                       } else {
-                        navigate({ search: { tag: [...currentTags, tag] } });
+                        navigate({ search: { tag: [...currentTags, tag].join('-') } });                      
                       }
                     }}
-                    className="text-[10px] sm:text-[11px] font-bold tracking-wider text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 sm:px-2.5 py-0.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors focus:outline-none"
-                  >
+                    className={cn(
+                      "text-[10px] font-bold tracking-wider px-2 sm:px-2.5 py-0.5 rounded-full transition-colors focus:outline-none",
+                      isSelected
+                        ? "bg-slate-700 text-slate-50 hover:bg-slate-600 dark:bg-slate-200 dark:text-slate-900 dark:hover:bg-slate-300"
+                        : "text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700"
+                      )}                  >
                     #{tag}
                   </button>
-                ))}
+                  );
+                })}
               </div>
             </div>
           ))

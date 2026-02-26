@@ -53,6 +53,7 @@ export function Select({
 
     if (option.exclusive) {
       onChange([option.value]);
+      setIsOpen(false);
       return;
     }
 
@@ -64,6 +65,7 @@ export function Select({
     } else {
       onChange([...currentValues, option.value]);
     }
+    setIsOpen(false);
   };
 
   const displayLabel = React.useMemo(() => {
@@ -94,48 +96,51 @@ export function Select({
           {icon && <span className="text-slate-500 shrink-0">{icon}</span>}
           <span className="truncate">{displayLabel}</span>
         </div>
-        <ChevronDown className={cn("h-4 w-4 shrink-0 opacity-50 transition-transform", isOpen && "rotate-180")} />
+        <ChevronDown className={cn("h-4 w-4 shrink-0 opacity-50 transition-transform duration-200", isOpen && "rotate-180")} />
       </button>
 
-      {isOpen && (
-        <div 
-          className={cn(
-            "absolute z-50 mt-1 max-h-60 w-full min-w-32 overflow-auto rounded-md border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-1 text-slate-700 dark:text-slate-200 shadow-md animate-in fade-in-0 zoom-in-95",
-            "[&::-webkit-scrollbar]:w-1.5",
-            "[&::-webkit-scrollbar-track]:bg-transparent",
-            "[&::-webkit-scrollbar-thumb]:rounded-full",
-            "[&::-webkit-scrollbar-thumb]:bg-slate-200 dark:[&::-webkit-scrollbar-thumb]:bg-slate-700",
-            "hover:[&::-webkit-scrollbar-thumb]:bg-slate-300 dark:hover:[&::-webkit-scrollbar-thumb]:bg-slate-600",
-            "[direction:rtl]"
-          )}
-        >
-          {options.map((option) => {
-            const isSelected = multiple
-              ? Array.isArray(value) && value.includes(option.value)
-              : value === option.value;
+      <div 
+        className={cn(
+          "absolute z-50 mt-1 max-h-60 w-full min-w-32 overflow-auto rounded-md border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-1 text-slate-700 dark:text-slate-200 shadow-md origin-top",
+          "transition-all duration-200 ease-out",
+          isOpen 
+            ? "opacity-100 visible scale-100 translate-y-0" 
+            : "opacity-0 invisible scale-95 -translate-y-1",
+            
+          "[&::-webkit-scrollbar]:w-1.5",
+          "[&::-webkit-scrollbar-track]:bg-transparent",
+          "[&::-webkit-scrollbar-thumb]:rounded-full",
+          "[&::-webkit-scrollbar-thumb]:bg-slate-200 dark:[&::-webkit-scrollbar-thumb]:bg-slate-700",
+          "hover:[&::-webkit-scrollbar-thumb]:bg-slate-300 dark:hover:[&::-webkit-scrollbar-thumb]:bg-slate-600",
+          "[direction:rtl]"
+        )}
+      >
+        {options.map((option) => {
+          const isSelected = multiple
+            ? Array.isArray(value) && value.includes(option.value)
+            : value === option.value;
 
-            return (
-              <button
-                key={option.value}
-                type="button"
-                onClick={() => handleSelect(option)}
-                className={cn(
-                  "[direction:ltr]",
-                  "relative flex w-full cursor-pointer select-none items-center justify-between rounded-sm px-2 py-1.5 text-sm outline-none transition-colors",
-                  "hover:bg-slate-100 dark:hover:bg-slate-800/50",
-                  "focus-visible:bg-slate-100 dark:focus-visible:bg-slate-800/50",
-                  isSelected && "font-medium text-slate-900 dark:text-slate-50"
-                )}
-              >
-                <span className="truncate">{option.label}</span>
-                {isSelected && (
-                  <Check className="h-4 w-4 shrink-0 text-slate-900 dark:text-slate-50 ml-2" />
-                )}
-              </button>
-            );
-          })}
-        </div>
-      )}
+          return (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => handleSelect(option)}
+              className={cn(
+                "[direction:ltr]",
+                "relative flex w-full cursor-pointer select-none items-center justify-between rounded-sm px-2 py-1.5 text-sm outline-none transition-colors",
+                "hover:bg-slate-100 dark:hover:bg-slate-800/50",
+                "focus-visible:bg-slate-100 dark:focus-visible:bg-slate-800/50",
+                isSelected && "font-medium text-slate-900 dark:text-slate-50"
+              )}
+            >
+              <span className="truncate">{option.label}</span>
+              {isSelected && (
+                <Check className="h-4 w-4 shrink-0 text-slate-900 dark:text-slate-50 ml-2" />
+              )}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }

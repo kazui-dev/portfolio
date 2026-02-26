@@ -2,7 +2,20 @@ import { createFileRoute } from '@tanstack/react-router'
 import Notes from '@/components/notes/Notes'
 import { PAGE_METADATA } from '@/constants/metadata'
 
+type NotesSearch = {
+  tag?: string | string[]
+}
+
 export const Route = createFileRoute('/notes/')({
+  validateSearch: (search: Record<string, unknown>): NotesSearch => {
+    return {
+      tag: Array.isArray(search.tag) 
+        ? search.tag.filter(t => typeof t === 'string') 
+        : typeof search.tag === 'string' 
+          ? search.tag 
+          : undefined,
+    }
+  },
   head: () => ({
     meta: [
       { title: PAGE_METADATA.notes.title },
@@ -23,5 +36,9 @@ export const Route = createFileRoute('/notes/')({
 })
 
 function RouteComponent() {
-  return <Notes />
+  // 💡 3. 検証済みのパラメータ（今回は tag）を取得
+  const { tag } = Route.useSearch()
+
+  // 💡 4. UIコンポーネントに props として渡す！
+  return <Notes selectedTag={tag} />
 }

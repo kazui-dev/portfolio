@@ -1,4 +1,11 @@
-import { User } from "lucide-react";
+import { User, ArrowRight } from "lucide-react";
+import { Link } from '@tanstack/react-router';
+
+const DUMMY_NOTES = [
+  { slug: 'tanstack-start-portfolio', title: 'TanStack Startでポートフォリオを作り始めた', publishedAt: new Date('2026-02-26'), tags: ['React', 'TanStack'] },
+  { slug: 'tailwind-spacing-tips', title: 'Tailwind CSSで心地よい余白を作るコツ', publishedAt: new Date('2026-02-20'), tags: ['Design', 'CSS'] },
+  { slug: 'd1-drizzle-setup', title: 'Cloudflare D1とDrizzle ORMの環境構築', publishedAt: new Date('2026-02-15'), tags: ['Database'] },
+];
 
 const Badge = ({ children }: { children: React.ReactNode }) => (
   <span className="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-full text-xs font-semibold tracking-wide">
@@ -10,7 +17,6 @@ export default function Home() {
   return (
     <div className="space-y-16">
       <section className="flex flex-col-reverse md:flex-row items-start md:items-center justify-between gap-8 md:gap-12">
-        
         <div className="flex-1 space-y-5">
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight">
             Hi, I'm Kazui
@@ -19,7 +25,6 @@ export default function Home() {
             情報科高校に通う学生です。<br />
             Web技術が好きで、フロントエンド開発やデザインに興味があります。
           </p>
-          
           <div className="flex flex-wrap gap-2 pt-2">
             <Badge>TypeScript</Badge>
             <Badge>React</Badge>
@@ -30,7 +35,6 @@ export default function Home() {
             <Badge>Electron</Badge>
           </div>
         </div>
-
         <div className="shrink-0">
           <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm">
             {/* <img src="/avatar.jpg" alt="Kazui" className="w-full h-full object-cover" /> */}
@@ -40,17 +44,52 @@ export default function Home() {
       </section>
 
       <section className="space-y-6">
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50 tracking-tight border-b border-slate-200 dark:border-slate-800 pb-2">
-          Recent Notes
-        </h2>
+        <div className="flex items-baseline justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50 tracking-tight">
+            Recent Notes
+          </h2>
+          <Link 
+            to="/notes" 
+            className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-colors"
+          >
+            View All <ArrowRight size={16} className="ml-1" />
+          </Link>
+        </div>
         
-        <div className="py-16 text-center bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800 border-dashed">
-          <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
-            投稿はまだありません。
-          </p>
+        <div className="flex flex-col">
+          {DUMMY_NOTES.map((note) => (
+            <Link 
+              key={note.slug}
+              to="/notes/$slug"
+              params={{ slug: note.slug }}
+              className="group py-4 sm:py-5 flex flex-col gap-2 border-b border-slate-200 dark:border-slate-800 last:border-0 hover:bg-slate-50/50 dark:hover:bg-slate-900/50 sm:hover:bg-transparent transition-colors -mx-4 px-4 sm:mx-0 sm:px-2 rounded-lg sm:rounded-none"
+            >
+              <div className="flex flex-wrap items-center gap-y-2">
+                <time className="text-sm font-medium text-slate-500 dark:text-slate-400 w-24 shrink-0">
+                  {note.publishedAt.toLocaleDateString('ja-JP').replace(/\//g, '.')}
+                </time>
+                
+                <div className="flex flex-wrap gap-2">
+                  {note.tags.map(tag => (
+                    <Link 
+                      key={tag} 
+                      to="/notes"
+                      search={{ tag: tag }}
+                      className="text-[11px] font-bold tracking-wider text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2.5 py-0.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                    >
+                      #{tag}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+              
+              <h3 className="text-base sm:text-lg font-medium text-slate-800 dark:text-slate-200 group-hover:text-slate-500 dark:group-hover:text-slate-400 transition-colors">
+                {note.title}
+              </h3>
+            </Link>
+          ))}
         </div>
       </section>
-
     </div>
   );
 }

@@ -9,7 +9,11 @@ export const getRouter = () => {
     routeTree,
     context: {},
 
-    //scrollRestoration: true,
+    scrollRestoration: true,
+    scrollRestorationBehavior: 'instant',
+    getScrollRestorationKey(location) {
+      return location.pathname + location.search;
+    },
     defaultPreloadStaleTime: 0,
     defaultPreload: 'intent',
     defaultNotFoundComponent: () => (

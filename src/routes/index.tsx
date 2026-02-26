@@ -1,8 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
 import Home from '@/components/home/Home'
 import { PAGE_METADATA } from '@/constants/metadata'
+import { getPublishedNotes } from '@/server/notes'
 
 export const Route = createFileRoute('/')({
+  loader: async () => {
+    const fetchedNotes = await getPublishedNotes();
+    return { notes: fetchedNotes };
+  },
   head: () => ({
     meta: [
       { title: PAGE_METADATA.home.title },
@@ -23,5 +28,6 @@ export const Route = createFileRoute('/')({
 })
 
 function IndexPage() {
-  return <Home />
+  const { notes } = Route.useLoaderData()
+  return <Home notes={notes} />
 }

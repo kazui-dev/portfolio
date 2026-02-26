@@ -2,12 +2,10 @@ import { useState, type MouseEvent } from 'react';
 import { Link } from '@tanstack/react-router';
 import { House, NotebookText, Menu as MenuIcon } from "lucide-react";
 import { Button } from '@/components/ui/button';
-import { useScrollStore } from '@/store/useScrollStore';
 import ThemeSelector from './ThemeSelector';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const clearScrollPosition = useScrollStore(state => state.clearScrollPosition);
 
   const closeMenu = () => setIsOpen(false);
 
@@ -15,8 +13,6 @@ export default function Header() {
     if (window.location.pathname === '/') {
       event.preventDefault();
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      clearScrollPosition('home');
     }
   };
 

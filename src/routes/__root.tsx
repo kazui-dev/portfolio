@@ -1,6 +1,4 @@
-import { useEffect, useLayoutEffect } from 'react';
-import { HeadContent, Scripts, createRootRoute, Outlet, useLocation } from '@tanstack/react-router';
-import { useScrollStore } from '@/store/useScrollStore';
+import { HeadContent, Scripts, createRootRoute, Outlet } from '@tanstack/react-router';
 import { ThemeProvider } from '@/lib/theme';
 import { PAGE_METADATA } from '@/constants/metadata';
 import Header from '@/components/layout/Header';
@@ -41,45 +39,6 @@ export const Route = createRootRoute({
 })
 
 function RootComponent() {
-  const location = useLocation();
-  const { positions, setScrollPosition } = useScrollStore();
-
-  useEffect(() => {
-    let timeoutId: number | undefined;
-
-    const handleScroll = () => {
-      if (timeoutId) return;
-      timeoutId = window.setTimeout(() => {
-        setScrollPosition(location.pathname, window.scrollY);
-        timeoutId = undefined;
-      }, 100);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (timeoutId) window.clearTimeout(timeoutId);
-    };
-  }, [location.pathname, setScrollPosition]);
-
-  useLayoutEffect(() => {
-    const savedPosition = positions[location.pathname];
-    
-    requestAnimationFrame(() => {
-      if (savedPosition !== undefined) {
-        window.scrollTo({ top: savedPosition, behavior: 'instant' });
-      } else {
-        window.scrollTo({ top: 0, behavior: 'instant' });
-      }
-    });
-  }, [location.pathname]);
-
-  useEffect(() => {
-    if ('scrollRestoration' in window.history) {
-      window.history.scrollRestoration = 'manual';
-    }
-  }, []);
-
   return (
     <ThemeProvider>
       <div className="min-h-screen flex flex-col bg-white dark:bg-slate-950">
@@ -94,7 +53,6 @@ function RootComponent() {
     </ThemeProvider>
   )
 }
-
 function RootDocument({ children }: { children: React.ReactNode }) {
   const themeScript = `
     (() => {

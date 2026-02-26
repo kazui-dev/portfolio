@@ -1,11 +1,6 @@
 import { User, ArrowRight } from "lucide-react";
 import { Link, useNavigate } from '@tanstack/react-router';
-
-const DUMMY_NOTES = [
-  { slug: 'tanstack-start-portfolio', title: 'TanStack Startでポートフォリオを作り始めた', publishedAt: new Date('2026-02-26'), tags: ['React', 'TanStack'] },
-  { slug: 'tailwind-spacing-tips', title: 'Tailwind CSSで心地よい余白を作るコツ', publishedAt: new Date('2026-02-20'), tags: ['Design', 'CSS'] },
-  { slug: 'd1-drizzle-setup', title: 'Cloudflare D1とDrizzle ORMの環境構築', publishedAt: new Date('2026-02-15'), tags: ['Database'] },
-];
+import type { Note } from '@/db/schema';
 
 const Badge = ({ children }: { children: React.ReactNode }) => (
   <span className="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-full text-xs font-semibold tracking-wide">
@@ -13,7 +8,7 @@ const Badge = ({ children }: { children: React.ReactNode }) => (
   </span>
 );
 
-export default function Home() {
+export default function Home({ notes }: { notes: Note[] }) {
   const navigate = useNavigate();
   return (
     <div className="space-y-16">
@@ -44,7 +39,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="space-y-6">
+      <section className="space-y-2">
         <div className="flex items-baseline justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
           <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50 tracking-tight">
             Recent Notes
@@ -58,16 +53,17 @@ export default function Home() {
         </div>
         
         <div className="flex flex-col">
-          {DUMMY_NOTES.map((note) => (
+          {notes.map((note) => (
             <div 
               key={note.slug}
               className="group relative py-4 sm:py-5 flex flex-col gap-2 border-b border-slate-200 dark:border-slate-800 last:border-0 hover:bg-slate-50/50 dark:hover:bg-slate-900/50 sm:hover:bg-transparent transition-colors -mx-4 px-4 sm:mx-0 sm:px-2 rounded-lg sm:rounded-none"
             >
               <div className="flex flex-wrap items-center gap-y-2">
                 <time className="text-sm font-medium text-slate-500 dark:text-slate-400 w-24 shrink-0">
-                  {note.publishedAt.toLocaleDateString('ja-JP').replace(/\//g, '.')}
+                  {note.publishedAt 
+                    ? note.publishedAt.toLocaleDateString('ja-JP').replace(/\//g, '.') 
+                    : '未公開'}   
                 </time>
-                
                 <div className="flex flex-wrap gap-2 relative z-10">
                   {note.tags.map(tag => (
                     <button 

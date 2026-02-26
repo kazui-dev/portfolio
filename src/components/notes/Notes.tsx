@@ -100,7 +100,7 @@ export default function Notes({ selectedTag, initialNotes }: { selectedTag?: str
                 #{tag}
                 <button 
                   onClick={() => removeTag(tag)}
-                  className="ml-0.5 focus:outline-none hover:text-red-300 dark:hover:text-red-600 transition-colors"
+                  className="ml-0.5 focus:outline-none hover:text-slate-300 dark:hover:text-slate-400 transition-colors"
                   aria-label={`Remove ${tag} filter`}
                 >
                   <X size={12} />

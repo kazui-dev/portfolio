@@ -13,7 +13,7 @@ const SITE_NAME = "kazui.dev";
 
 export const PAGE_METADATA: Record<PageID, PageMetadata> = {
   home: {
-    title: `Home - ${SITE_NAME}`,
+    title: `kazui`,
     ogTitle: `Home - ${SITE_NAME}`,
     ogDescription: `Home - ${SITE_NAME}`,
     description: `Home - ${SITE_NAME}`,
@@ -22,7 +22,7 @@ export const PAGE_METADATA: Record<PageID, PageMetadata> = {
       "@graph": [
         {
           "@type": "WebSite",
-          "name": `Home - ${SITE_NAME}`,
+          "name": `${SITE_NAME}`,
           "url": `${SITE_URL}/`,
           "alternateName": ["Kazui", "美輪和維", "Kazui Miwa"],
           "description": `Home - ${SITE_NAME}`,
@@ -51,7 +51,7 @@ export const PAGE_METADATA: Record<PageID, PageMetadata> = {
     }
   },
   notes: {
-    title: `Notes - ${SITE_NAME}`,
+    title: `kazui's Notes`,
     ogTitle: `Notes - ${SITE_NAME}`,
     ogDescription: `Notes - ${SITE_NAME}`,
     description: `Notes - ${SITE_NAME}`,

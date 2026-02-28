@@ -46,7 +46,7 @@ export default function Footer() {
         </div>
 
         <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
-          © {new Date().getFullYear()} kazui.dev
+          © {new Date().getFullYear()} kazui
         </p>
 
       </div>

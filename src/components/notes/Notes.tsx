@@ -58,13 +58,10 @@ export default function Notes({ selectedTag, initialNotes }: { selectedTag?: str
 
   return (
     <div className="space-y-8">
-      <div className="space-y-4 border-b border-slate-200 dark:border-slate-800 pb-6">
+      <div className="border-b border-slate-200 dark:border-slate-800 pb-2">
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight">
           Notes
         </h1>
-        <p className="text-slate-600 dark:text-slate-400">
-          技術的な活動や学びを記録していきます。
-        </p>
       </div>
 
       <div className="flex flex-wrap items-center gap-3 sm:gap-4">

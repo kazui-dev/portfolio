@@ -108,7 +108,6 @@ function RouteComponent() {
 
   return (
     <div className="space-y-4">
-      {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
         <Link
           to="/admin/notes"
@@ -123,7 +122,6 @@ function RouteComponent() {
         </span>
       </nav>
 
-      {/* Form fields */}
       <div className="space-y-3">
         <input
           type="text"
@@ -150,9 +148,7 @@ function RouteComponent() {
         </div>
       </div>
 
-      {/* Action bar */}
       <div className="flex flex-wrap items-center gap-3">
-        {/* Published toggle */}
         <button
           type="button"
           onClick={handleTogglePublished}
@@ -179,7 +175,6 @@ function RouteComponent() {
           <span>{isPublished ? 'Published' : 'Draft'}</span>
         </button>
 
-        {/* View live page */}
         {!isNew && isPublished && slug && (
           <a
             href={`/notes/${slug}`}
@@ -209,7 +204,6 @@ function RouteComponent() {
         </div>
       </div>
 
-      {/* Mobile pane tabs */}
       <div className="flex border-b border-slate-200 dark:border-slate-800 sm:hidden">
         {(['editor', 'preview'] as const).map((pane) => (
           <button
@@ -227,9 +221,7 @@ function RouteComponent() {
         ))}
       </div>
 
-      {/* 2-pane editor — fixed height, each pane scrolls independently */}
       <div className="grid sm:grid-cols-2 gap-4 h-[calc(100vh-280px)] min-h-96">
-        {/* Editor pane */}
         <div
           className={cn(
             'h-full overflow-hidden border border-slate-200 dark:border-slate-800 rounded-xl',
@@ -245,7 +237,6 @@ function RouteComponent() {
           </Suspense>
         </div>
 
-        {/* Preview pane */}
         <div
           className={cn(
             'h-full overflow-y-auto border border-slate-200 dark:border-slate-800 rounded-xl p-5',

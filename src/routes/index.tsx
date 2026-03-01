@@ -29,5 +29,9 @@ export const Route = createFileRoute('/')({
 
 function IndexPage() {
   const { notes } = Route.useLoaderData()
-  return <Home notes={notes} />
+  return (
+    <div className="w-full max-w-4xl mx-auto">
+      <Home notes={notes} />
+    </div>
+  )
 }

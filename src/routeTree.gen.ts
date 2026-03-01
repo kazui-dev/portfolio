@@ -9,58 +9,138 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as NotesRouteImport } from './routes/notes'
+import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as NotesIndexRouteImport } from './routes/notes.index'
 import { Route as NotesSlugRouteImport } from './routes/notes.$slug'
+import { Route as AdminNotesRouteImport } from './routes/admin/notes'
+import { Route as AdminNotesIndexRouteImport } from './routes/admin/notes.index'
+import { Route as AdminNotesIdEditRouteImport } from './routes/admin/notes.$id.edit'
 
+const NotesRoute = NotesRouteImport.update({
+  id: '/notes',
+  path: '/notes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRouteRoute = AdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NotesIndexRoute = NotesIndexRouteImport.update({
-  id: '/notes/',
-  path: '/notes/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => NotesRoute,
 } as any)
 const NotesSlugRoute = NotesSlugRouteImport.update({
-  id: '/notes/$slug',
-  path: '/notes/$slug',
-  getParentRoute: () => rootRouteImport,
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => NotesRoute,
+} as any)
+const AdminNotesRoute = AdminNotesRouteImport.update({
+  id: '/notes',
+  path: '/notes',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminNotesIndexRoute = AdminNotesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminNotesRoute,
+} as any)
+const AdminNotesIdEditRoute = AdminNotesIdEditRouteImport.update({
+  id: '/$id/edit',
+  path: '/$id/edit',
+  getParentRoute: () => AdminNotesRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
+  '/notes': typeof NotesRouteWithChildren
+  '/admin/notes': typeof AdminNotesRouteWithChildren
   '/notes/$slug': typeof NotesSlugRoute
   '/notes/': typeof NotesIndexRoute
+  '/admin/notes/': typeof AdminNotesIndexRoute
+  '/admin/notes/$id/edit': typeof AdminNotesIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/notes/$slug': typeof NotesSlugRoute
   '/notes': typeof NotesIndexRoute
+  '/admin/notes': typeof AdminNotesIndexRoute
+  '/admin/notes/$id/edit': typeof AdminNotesIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
+  '/notes': typeof NotesRouteWithChildren
+  '/admin/notes': typeof AdminNotesRouteWithChildren
   '/notes/$slug': typeof NotesSlugRoute
   '/notes/': typeof NotesIndexRoute
+  '/admin/notes/': typeof AdminNotesIndexRoute
+  '/admin/notes/$id/edit': typeof AdminNotesIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/notes/$slug' | '/notes/'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/notes'
+    | '/admin/notes'
+    | '/notes/$slug'
+    | '/notes/'
+    | '/admin/notes/'
+    | '/admin/notes/$id/edit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/notes/$slug' | '/notes'
-  id: '__root__' | '/' | '/notes/$slug' | '/notes/'
+  to:
+    | '/'
+    | '/admin'
+    | '/notes/$slug'
+    | '/notes'
+    | '/admin/notes'
+    | '/admin/notes/$id/edit'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/notes'
+    | '/admin/notes'
+    | '/notes/$slug'
+    | '/notes/'
+    | '/admin/notes/'
+    | '/admin/notes/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  NotesSlugRoute: typeof NotesSlugRoute
-  NotesIndexRoute: typeof NotesIndexRoute
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren
+  NotesRoute: typeof NotesRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/notes': {
+      id: '/notes'
+      path: '/notes'
+      fullPath: '/notes'
+      preLoaderRoute: typeof NotesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -70,25 +150,84 @@ declare module '@tanstack/react-router' {
     }
     '/notes/': {
       id: '/notes/'
-      path: '/notes'
+      path: '/'
       fullPath: '/notes/'
       preLoaderRoute: typeof NotesIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof NotesRoute
     }
     '/notes/$slug': {
       id: '/notes/$slug'
-      path: '/notes/$slug'
+      path: '/$slug'
       fullPath: '/notes/$slug'
       preLoaderRoute: typeof NotesSlugRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof NotesRoute
+    }
+    '/admin/notes': {
+      id: '/admin/notes'
+      path: '/notes'
+      fullPath: '/admin/notes'
+      preLoaderRoute: typeof AdminNotesRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/notes/': {
+      id: '/admin/notes/'
+      path: '/'
+      fullPath: '/admin/notes/'
+      preLoaderRoute: typeof AdminNotesIndexRouteImport
+      parentRoute: typeof AdminNotesRoute
+    }
+    '/admin/notes/$id/edit': {
+      id: '/admin/notes/$id/edit'
+      path: '/$id/edit'
+      fullPath: '/admin/notes/$id/edit'
+      preLoaderRoute: typeof AdminNotesIdEditRouteImport
+      parentRoute: typeof AdminNotesRoute
     }
   }
 }
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+interface AdminNotesRouteChildren {
+  AdminNotesIndexRoute: typeof AdminNotesIndexRoute
+  AdminNotesIdEditRoute: typeof AdminNotesIdEditRoute
+}
+
+const AdminNotesRouteChildren: AdminNotesRouteChildren = {
+  AdminNotesIndexRoute: AdminNotesIndexRoute,
+  AdminNotesIdEditRoute: AdminNotesIdEditRoute,
+}
+
+const AdminNotesRouteWithChildren = AdminNotesRoute._addFileChildren(
+  AdminNotesRouteChildren,
+)
+
+interface AdminRouteRouteChildren {
+  AdminNotesRoute: typeof AdminNotesRouteWithChildren
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminNotesRoute: AdminNotesRouteWithChildren,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+)
+
+interface NotesRouteChildren {
+  NotesSlugRoute: typeof NotesSlugRoute
+  NotesIndexRoute: typeof NotesIndexRoute
+}
+
+const NotesRouteChildren: NotesRouteChildren = {
   NotesSlugRoute: NotesSlugRoute,
   NotesIndexRoute: NotesIndexRoute,
+}
+
+const NotesRouteWithChildren = NotesRoute._addFileChildren(NotesRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
+  NotesRoute: NotesRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

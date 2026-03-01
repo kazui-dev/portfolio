@@ -3,6 +3,7 @@ import { useState, useMemo } from 'react';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { X, Filter, ArrowUpDown } from 'lucide-react';
 import { Select } from '@/components/ui/select';
+import NoteGrid from '@/components/notes/NoteGrid';
 import type { Note } from '@/db/schema';
 
 export default function Notes({ selectedTag, initialNotes }: { selectedTag?: string, initialNotes?: Note[] }) {
@@ -108,58 +109,22 @@ export default function Notes({ selectedTag, initialNotes }: { selectedTag?: str
         )}
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5">
-        {processedNotes.length > 0 ? (
-          processedNotes.map((note) => (
-            <div 
-              key={note.slug}
-              className="group relative flex flex-col justify-between p-4 sm:p-5 bg-white dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-sm transition-all h-full"
-            >
-              <div className="space-y-2 mb-4">
-                <time className="text-[10px] sm:text-xs font-medium text-slate-500 dark:text-slate-400">
-                  {note.publishedAt 
-                    ? note.publishedAt.toLocaleDateString('ja-JP').replace(/\//g, '.') 
-                    : '未公開'}                </time>
-                <h2 className="text-sm sm:text-base font-bold text-slate-800 dark:text-slate-200 group-hover:text-slate-500 dark:group-hover:text-slate-400 transition-colors line-clamp-3">
-                  <Link to="/notes/$slug" params={{ slug: note.slug }} className="before:absolute before:inset-0">
-                    {note.title}
-                  </Link>
-                </h2>
-              </div>
-
-              <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-auto pt-3 border-t border-slate-100 dark:border-slate-800/50 relative z-10">
-                {note.tags.map(tag => {
-                  const isSelected = currentTags.includes(tag);
-                  return (
-                  <button 
-                    key={tag}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (currentTags.includes(tag)) {
-                        removeTag(tag);
-                      } else {
-                        navigate({ search: { tag: [...currentTags, tag].join('-') } });                      
-                      }
-                    }}
-                    className={cn(
-                      "text-[10px] font-bold tracking-wider px-2 sm:px-2.5 py-0.5 rounded-full transition-colors focus:outline-none",
-                      isSelected
-                        ? "bg-slate-700 text-slate-50 hover:bg-slate-600 dark:bg-slate-200 dark:text-slate-900 dark:hover:bg-slate-300"
-                        : "text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700"
-                      )}                  >
-                    #{tag}
-                  </button>
-                  );
-                })}
-              </div>
-            </div>
-          ))
-        ) : (
-          <div className="col-span-full py-16 text-center text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
-            ノートが見つかりませんでした。
-          </div>
+      <NoteGrid
+        notes={processedNotes}
+        currentTags={currentTags}
+        onTagToggle={(tag) => {
+          if (currentTags.includes(tag)) {
+            removeTag(tag);
+          } else {
+            navigate({ search: { tag: [...currentTags, tag].join('-') } });
+          }
+        }}
+        renderNoteLink={(note, children) => (
+          <Link to="/notes/$slug" params={{ slug: note.slug }} className="before:absolute before:inset-0">
+            {children}
+          </Link>
         )}
-      </div>
+      />
     </div>
   )
 }

@@ -1,8 +1,9 @@
-import { HeadContent, Scripts, createRootRoute, Outlet } from '@tanstack/react-router';
+import { HeadContent, Scripts, createRootRoute, Outlet, useRouterState } from '@tanstack/react-router';
 import { ThemeProvider } from '@/lib/theme';
 import { PAGE_METADATA } from '@/constants/metadata';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { cn } from '@/lib/utils';
 import '@fontsource/inter/400.css';
 import '@fontsource/inter/500.css';
 import '@fontsource/inter/700.css';
@@ -39,16 +40,22 @@ export const Route = createRootRoute({
 })
 
 function RootComponent() {
+  const { location } = useRouterState();
+  const isAdmin = location.pathname.startsWith('/admin');
+
   return (
     <ThemeProvider>
       <div className="min-h-screen flex flex-col bg-white dark:bg-slate-950">
-        <Header />
-        <main className="flex-1 w-full md:pl-64">
-          <div className="p-10 w-full max-w-4xl mx-auto md:mx-0">
+        {!isAdmin && <Header />}
+        <main className="flex-1 w-full">
+          <div className={cn(
+            'w-full px-4 sm:px-6 pt-8 sm:pt-10 pb-20 sm:pb-24',
+            isAdmin && 'pt-6 sm:pt-8 pb-10',
+          )}>
             <Outlet />
           </div>
         </main>
-        <Footer />
+        {!isAdmin && <Footer />}
       </div>
     </ThemeProvider>
   )

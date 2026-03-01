@@ -14,7 +14,6 @@ import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as NotesIndexRouteImport } from './routes/notes.index'
 import { Route as NotesSlugRouteImport } from './routes/notes.$slug'
-import { Route as ApiOgRouteImport } from './routes/api/og'
 import { Route as AdminNotesRouteImport } from './routes/admin/notes'
 import { Route as AdminNotesIndexRouteImport } from './routes/admin/notes.index'
 import { Route as AdminNotesIdEditRouteImport } from './routes/admin/notes.$id.edit'
@@ -44,11 +43,6 @@ const NotesSlugRoute = NotesSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => NotesRoute,
 } as any)
-const ApiOgRoute = ApiOgRouteImport.update({
-  id: '/api/og',
-  path: '/api/og',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AdminNotesRoute = AdminNotesRouteImport.update({
   id: '/notes',
   path: '/notes',
@@ -70,7 +64,6 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/notes': typeof NotesRouteWithChildren
   '/admin/notes': typeof AdminNotesRouteWithChildren
-  '/api/og': typeof ApiOgRoute
   '/notes/$slug': typeof NotesSlugRoute
   '/notes/': typeof NotesIndexRoute
   '/admin/notes/': typeof AdminNotesIndexRoute
@@ -79,7 +72,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
-  '/api/og': typeof ApiOgRoute
   '/notes/$slug': typeof NotesSlugRoute
   '/notes': typeof NotesIndexRoute
   '/admin/notes': typeof AdminNotesIndexRoute
@@ -91,7 +83,6 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteRouteWithChildren
   '/notes': typeof NotesRouteWithChildren
   '/admin/notes': typeof AdminNotesRouteWithChildren
-  '/api/og': typeof ApiOgRoute
   '/notes/$slug': typeof NotesSlugRoute
   '/notes/': typeof NotesIndexRoute
   '/admin/notes/': typeof AdminNotesIndexRoute
@@ -104,7 +95,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/notes'
     | '/admin/notes'
-    | '/api/og'
     | '/notes/$slug'
     | '/notes/'
     | '/admin/notes/'
@@ -113,7 +103,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admin'
-    | '/api/og'
     | '/notes/$slug'
     | '/notes'
     | '/admin/notes'
@@ -124,7 +113,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/notes'
     | '/admin/notes'
-    | '/api/og'
     | '/notes/$slug'
     | '/notes/'
     | '/admin/notes/'
@@ -135,7 +123,6 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   NotesRoute: typeof NotesRouteWithChildren
-  ApiOgRoute: typeof ApiOgRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -174,13 +161,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/notes/$slug'
       preLoaderRoute: typeof NotesSlugRouteImport
       parentRoute: typeof NotesRoute
-    }
-    '/api/og': {
-      id: '/api/og'
-      path: '/api/og'
-      fullPath: '/api/og'
-      preLoaderRoute: typeof ApiOgRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/admin/notes': {
       id: '/admin/notes'
@@ -248,7 +228,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
   NotesRoute: NotesRouteWithChildren,
-  ApiOgRoute: ApiOgRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

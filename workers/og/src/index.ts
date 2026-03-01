@@ -1,4 +1,31 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { Resvg } from '@cf-wasm/resvg'
+
+let fontsCache: Uint8Array[] | null = null
+
+async function getFonts(): Promise<Uint8Array[]> {
+  if (fontsCache) return fontsCache
+
+  const ua = 'Mozilla/5.0 (compatible; bot)'
+  const [interRes, notoRes] = await Promise.all([
+    fetch('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap', { headers: { 'User-Agent': ua } }),
+    fetch('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600&display=swap', { headers: { 'User-Agent': ua } }),
+  ])
+  const [interCss, notoCss] = await Promise.all([interRes.text(), notoRes.text()])
+
+  const urlPattern = /url\((https:\/\/fonts\.gstatic\.com[^)]+)\)/g
+  const urls: string[] = []
+  for (const css of [interCss, notoCss]) {
+    let m: RegExpExecArray | null
+    while ((m = urlPattern.exec(css)) !== null) urls.push(m[1])
+  }
+
+  const buffers = await Promise.all(
+    urls.map(u => fetch(u).then(r => r.arrayBuffer()).then(b => new Uint8Array(b)))
+  )
+  fontsCache = buffers
+  return fontsCache
+}
+
 function estimateCharWidth(ch: string, fontSize: number): number {
   const code = ch.codePointAt(0) ?? 0
   const isCJK =
@@ -52,7 +79,7 @@ function wrapLines(text: string, maxWidth: number, fontSize: number): string[] {
   return lines
 }
 
-function buildSvg(title: string) {
+function buildSvg(title: string): string {
   const fontSize = title.length > 100 ? 44 : title.length > 60 ? 54 : 64
   const escaped = title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
@@ -60,7 +87,7 @@ function buildSvg(title: string) {
   const cardX = 48
   const cardY = 48
   const cardW = 1104
-  const maxTextWidth = cardW - cardPad * 2  // 944px
+  const maxTextWidth = cardW - cardPad * 2
   const titleX = cardX + cardPad
   const titleY = cardY + cardPad + fontSize
 
@@ -84,22 +111,39 @@ function buildSvg(title: string) {
 </svg>`
 }
 
-export const Route = createFileRoute('/api/og')({
-  server: {
-    handlers: {
-      GET: async ({ request }) => {
-        const url = new URL(request.url)
-        const title = url.searchParams.get('title') ?? 'kazui.dev'
+export default {
+  async fetch(request: Request): Promise<Response> {
+    if (request.method !== 'GET') {
+      return new Response('Method Not Allowed', { status: 405 })
+    }
 
-        return new Response(buildSvg(title), {
-          headers: {
-            'Content-Type': 'image/svg+xml',
-            'Cache-Control': 'public, max-age=86400, s-maxage=86400',
-          },
-        })
-      },
-    },
+    const url = new URL(request.url)
+    const title = url.searchParams.get('title') ?? 'kazui.dev'
+    const svg = buildSvg(title)
+
+    try {
+      const fonts = await getFonts()
+      const resvg = new Resvg(svg, {
+        fitTo: { mode: 'width', value: 1200 },
+        font: { fontBuffers: fonts },
+      })
+      const png = resvg.render().asPng()
+
+      return new Response(png.buffer as ArrayBuffer, {
+        headers: {
+          'Content-Type': 'image/png',
+          'Cache-Control': 'public, max-age=86400, s-maxage=86400',
+          'Access-Control-Allow-Origin': 'https://kazui.dev',
+        },
+      })
+    } catch (error) {
+      return new Response(svg, {
+        headers: {
+          'Content-Type': 'image/svg+xml',
+          'Cache-Control': 'public, max-age=86400',
+          'Access-Control-Allow-Origin': 'https://kazui.dev',
+        },
+      })
+    }
   },
-  component: () => null,
-})
-
+}

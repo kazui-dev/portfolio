@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { MarkdownHooks } from 'react-markdown'
 import type { Components } from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import remarkBreaks from 'remark-breaks'
 import rehypePrettyCode from 'rehype-pretty-code'
 import type { Note } from '@/db/schema'
 import { cn } from '@/lib/utils'
@@ -190,7 +191,7 @@ export default function NoteArticle({
                 <p className="text-sm text-slate-500 dark:text-slate-400">本文を読み込み中...</p>
               </div>
             }
-            remarkPlugins={[remarkGfm]}
+            remarkPlugins={[remarkGfm, remarkBreaks]}
             rehypePlugins={[[rehypePrettyCode, prettyCodeOptions]]}
             components={markdownComponents}
           >

@@ -33,6 +33,9 @@ export const Route = createFileRoute('/notes/$slug')({
   head: ({ loaderData }) => {
     const title = `${loaderData?.note.title ?? 'Notes'} - kazui.dev`
     const description = createArticleDescription(loaderData?.note.content ?? '')
+    const ogImage = loaderData?.note.title
+      ? `/api/og?title=${encodeURIComponent(loaderData.note.title)}`
+      : undefined
 
     return {
       meta: [
@@ -40,8 +43,11 @@ export const Route = createFileRoute('/notes/$slug')({
         { name: 'description', content: description || ARTICLE_META_FALLBACK },
         { property: 'og:title', content: title },
         { property: 'og:description', content: description || ARTICLE_META_FALLBACK },
+        ...(ogImage ? [{ property: 'og:image', content: ogImage }] : []),
+        { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: title },
         { name: 'twitter:description', content: description || ARTICLE_META_FALLBACK },
+        ...(ogImage ? [{ name: 'twitter:image', content: ogImage }] : []),
       ],
     }
   },

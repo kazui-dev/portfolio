@@ -5,7 +5,7 @@ import type { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import rehypePrettyCode from 'rehype-pretty-code';
-import { ChevronLeft, Save, Trash2, ExternalLink } from 'lucide-react';
+import { ChevronLeft, Save, Trash2, ExternalLink, Image } from 'lucide-react';
 import { getNoteById, upsertNote, deleteNote } from '@/server/admin';
 import { Button } from '@/components/ui/button';
 import { baseMarkdownComponents, prettyCodeOptions } from '@/components/notes/NoteArticle';
@@ -56,6 +56,7 @@ function RouteComponent() {
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [activePane, setActivePane] = useState<'editor' | 'preview'>('editor');
+  const [showOgPreview, setShowOgPreview] = useState(false);
 
   const isNew = id === 'new';
 
@@ -187,6 +188,17 @@ function RouteComponent() {
           </a>
         )}
 
+        {title && (
+          <button
+            type="button"
+            onClick={() => setShowOgPreview((v) => !v)}
+            className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors"
+          >
+            <Image size={14} />
+            OG Preview
+          </button>
+        )}
+
         <div className="flex items-center gap-2 ml-auto">
           {saveError && (
             <span className="text-xs text-red-500 dark:text-red-400">{saveError}</span>
@@ -203,6 +215,22 @@ function RouteComponent() {
           </Button>
         </div>
       </div>
+
+      {showOgPreview && title && (
+        <div className="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800">
+          <div className="px-3 py-2 text-xs text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800 flex items-center gap-1.5">
+            <Image size={12} />
+            OG Image Preview
+          </div>
+          <img
+            key={title}
+            src={`/api/og?title=${encodeURIComponent(title)}`}
+            alt="OG image preview"
+            className="w-full"
+            style={{ aspectRatio: '1200 / 630' }}
+          />
+        </div>
+      )}
 
       <div className="flex border-b border-slate-200 dark:border-slate-800 sm:hidden">
         {(['editor', 'preview'] as const).map((pane) => (

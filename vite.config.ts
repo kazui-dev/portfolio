@@ -14,6 +14,11 @@ const config = defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  server: {
+    headers: {
+      'Content-Security-Policy': "script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval'",
+    },
+  },
   plugins: [
     tanstackStart({}),
     devtools(),

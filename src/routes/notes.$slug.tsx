@@ -6,7 +6,7 @@ import type { Note } from '@/db/schema'
 const ARTICLE_META_FALLBACK = 'Notes article'
 
 function createArticleDescription(content: string) {
-  return content.replace(/[#*_`>\-]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 140)
+  return content.replace(/[#*_`>\-]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 70)
 }
 
 export const Route = createFileRoute('/notes/$slug')({

@@ -4,7 +4,6 @@ function buildSvgFallback(title: string) {
   const fontSize = title.length > 40 ? 40 : title.length > 24 ? 52 : 64
   const escaped = title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
-  // Wrap text manually for SVG (approx chars per line based on font size)
   const charsPerLine = Math.floor(1000 / (fontSize * 0.55))
   const words = escaped.split(' ')
   const lines: string[] = []
@@ -47,8 +46,6 @@ export const Route = createFileRoute('/api/og')({
         const title = url.searchParams.get('title') ?? 'kazui.dev'
         const origin = url.origin
 
-        // In dev, Vite pre-bundles WASM packages in a way that CF workerd blocks.
-        // Return an SVG fallback that renders correctly in the browser.
         if (import.meta.env.DEV) {
           return new Response(buildSvgFallback(title), {
             headers: { 'Content-Type': 'image/svg+xml' },
@@ -66,9 +63,7 @@ export const Route = createFileRoute('/api/og')({
             },
           })
         } catch (err) {
-          const message = err instanceof Error ? err.message : String(err)
           console.error('OG image generation error:', err)
-          // Fallback to SVG on error
           return new Response(buildSvgFallback(title), {
             headers: { 'Content-Type': 'image/svg+xml' },
           })

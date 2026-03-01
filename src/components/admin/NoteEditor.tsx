@@ -21,7 +21,7 @@ export default function NoteEditor({ value, onChange }: NoteEditorProps) {
     <CodeMirror
       value={value}
       onChange={onChange}
-      extensions={[markdown(), contentPadding, EditorView.lineWrapping]}
+      extensions={[markdown({ codeLanguages: [] }), contentPadding, EditorView.lineWrapping]}
       theme={resolvedTheme === 'dark' ? githubDark : githubLight}
       height="100%"
       className="h-full text-sm"

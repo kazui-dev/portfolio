@@ -10,7 +10,6 @@
     "deploy": "pnpm run build && wrangler deploy"
   },
   "dependencies": {
-    "@cf-wasm/resvg": "^0.3.3",
     "@cloudflare/vite-plugin": "^1.13.8",
     "@codemirror/lang-markdown": "^6.5.0",
     "@fontsource/inter": "^5.2.8",

@@ -1,5 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router'
-
 function estimateCharWidth(ch: string, fontSize: number): number {
   const code = ch.codePointAt(0) ?? 0
   const isCJK =
@@ -91,30 +90,13 @@ export const Route = createFileRoute('/api/og')({
       GET: async ({ request }) => {
         const url = new URL(request.url)
         const title = url.searchParams.get('title') ?? 'kazui.dev'
-        const svg = buildSvg(title)
 
-        if (import.meta.env.DEV) {
-          return new Response(svg, {
-            headers: { 'Content-Type': 'image/svg+xml' },
-          })
-        }
-
-        try {
-          const { Resvg } = await import('@cf-wasm/resvg')
-          const resvg = new Resvg(svg, { fitTo: { mode: 'width', value: 1200 } })
-          const png = resvg.render().asPng()
-
-          return new Response(png.buffer as ArrayBuffer, {
-            headers: {
-              'Content-Type': 'image/png',
-              'Cache-Control': 'public, max-age=86400, s-maxage=86400',
-            },
-          })
-        } catch (error) {
-          return new Response(svg, {
-            headers: { 'Content-Type': 'image/svg+xml' },
-          })
-        }
+        return new Response(buildSvg(title), {
+          headers: {
+            'Content-Type': 'image/svg+xml',
+            'Cache-Control': 'public, max-age=86400, s-maxage=86400',
+          },
+        })
       },
     },
   },

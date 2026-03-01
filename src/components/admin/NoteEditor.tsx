@@ -1,4 +1,3 @@
-// Client-only component — must be imported with React.lazy to avoid SSR issues
 import CodeMirror from '@uiw/react-codemirror';
 import { markdown } from '@codemirror/lang-markdown';
 import { githubLight, githubDark } from '@uiw/codemirror-theme-github';

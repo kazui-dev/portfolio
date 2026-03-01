@@ -2,6 +2,7 @@ import { createFileRoute, notFound } from '@tanstack/react-router'
 import NoteArticle from '@/components/notes/NoteArticle'
 import { getPublishedNoteBySlug, getPublishedNotes } from '@/server/notes'
 import type { Note } from '@/db/schema'
+import { SITE_URL } from '@/constants/metadata'
 
 const ARTICLE_META_FALLBACK = 'Notes article'
 
@@ -34,7 +35,7 @@ export const Route = createFileRoute('/notes/$slug')({
     const title = `${loaderData?.note.title ?? 'Notes'} - kazui.dev`
     const description = createArticleDescription(loaderData?.note.content ?? '')
     const ogImage = loaderData?.note.title
-      ? `/api/og?title=${encodeURIComponent(loaderData.note.title)}`
+      ? `${SITE_URL}/api/og?title=${encodeURIComponent(loaderData.note.title)}`
       : undefined
 
     return {

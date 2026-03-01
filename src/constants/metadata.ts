@@ -8,7 +8,7 @@ type PageMetadata = {
   jsonLd: Record<string, any>;
 };
 
-const SITE_URL = "https://kazui.dev";
+export const SITE_URL = "https://kazui.dev";
 const SITE_NAME = "kazui.dev";
 
 export const PAGE_METADATA: Record<PageID, PageMetadata> = {

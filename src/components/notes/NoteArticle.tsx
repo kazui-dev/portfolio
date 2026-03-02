@@ -184,7 +184,7 @@ export default function NoteArticle({
           </div>
         </header>
 
-        <div className="space-y-5 text-[15px] text-slate-700 dark:text-slate-300 leading-7">
+        <div className="space-y-5 text-[15px] text-slate-700 dark:text-slate-300 leading-7 break-words">
           <MarkdownHooks
             fallback={
               <div className="min-h-[45vh]">

@@ -166,7 +166,7 @@ export default function NoteArticle({
         </nav>
 
         <header className="space-y-3 border-b border-slate-200 dark:border-slate-800 pb-6">
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight break-words">
             {note.title}
           </h1>
           <div className="flex flex-wrap items-center gap-3 text-sm">

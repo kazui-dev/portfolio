@@ -36,41 +36,25 @@ function isCJKChar(ch: string): boolean {
 }
 
 function estimateCharWidth(ch: string, fontSize: number): number {
-  if (isCJKChar(ch)) return fontSize * 0.85
+  if (isCJKChar(ch)) return fontSize * 1.0
   if (ch === ' ') return fontSize * 0.25
-  return fontSize * 0.48
+  return fontSize * 0.6
 }
 
 function wrapLines(text: string, maxWidth: number, fontSize: number): string[] {
-  const tokens: string[] = []
-  let buf = ''
-  for (const ch of text) {
-    if (ch === ' ') {
-      if (buf) { tokens.push(buf); buf = '' }
-      tokens.push(' ')
-    } else if (isCJKChar(ch)) {
-      if (buf) { tokens.push(buf); buf = '' }
-      tokens.push(ch)
-    } else {
-      buf += ch
-    }
-  }
-  if (buf) tokens.push(buf)
-
   const lines: string[] = []
   let line = ''
   let lineW = 0
 
-  for (const token of tokens) {
-    const tw = token.split('').reduce((s, c) => s + estimateCharWidth(c, fontSize), 0)
-    if (token === ' ') {
-      if (line) { line += ' '; lineW += tw }
-    } else if (lineW + tw > maxWidth && line) {
+  for (const ch of text) {
+    if (ch === ' ' && line === '') continue
+    const tw = estimateCharWidth(ch, fontSize)
+    if (lineW + tw > maxWidth && line) {
       lines.push(line.trimEnd())
-      line = token
-      lineW = tw
+      line = ch === ' ' ? '' : ch
+      lineW = ch === ' ' ? 0 : tw
     } else {
-      line += token
+      line += ch
       lineW += tw
     }
   }
@@ -84,7 +68,6 @@ function renderLine(line: string, x: number, y: number, fontSize: number): strin
 
 function buildSvg(title: string): string {
   const fontSize = title.length > 100 ? 44 : title.length > 60 ? 54 : 64
-  const escaped = title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
   const cardPad = 80
   const cardX = 28
@@ -95,10 +78,10 @@ function buildSvg(title: string): string {
   const titleX = cardX + cardPad
   const titleY = cardY + cardPad + fontSize
 
-  const lines = wrapLines(escaped, maxTextWidth, fontSize)
+  const lines = wrapLines(title, maxTextWidth, fontSize)
   const lineHeight = fontSize * 1.4
   const textLines = lines
-    .map((line, i) => renderLine(line, titleX, titleY + i * lineHeight, fontSize))
+    .map((line, i) => renderLine(line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'), titleX, titleY + i * lineHeight, fontSize))
     .join('\n  ')
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">

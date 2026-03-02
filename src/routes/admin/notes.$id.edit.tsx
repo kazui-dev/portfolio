@@ -8,6 +8,7 @@ import rehypePrettyCode from 'rehype-pretty-code';
 import { ChevronLeft, Save, Trash2, ExternalLink, Image } from 'lucide-react';
 import { getNoteById, upsertNote, deleteNote } from '@/server/admin';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { baseMarkdownComponents, prettyCodeOptions } from '@/components/notes/NoteArticle';
 import { cn } from '@/lib/utils';
 
@@ -216,21 +217,23 @@ function RouteComponent() {
         </div>
       </div>
 
-      {showOgPreview && title && (
-        <div className="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800">
-          <div className="px-3 py-2 text-xs text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800 flex items-center gap-1.5">
-            <Image size={12} />
-            OG Image Preview
-          </div>
+      <Dialog open={showOgPreview} onOpenChange={setShowOgPreview}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-sm font-medium">
+              <Image size={14} />
+              OG Image Preview
+            </DialogTitle>
+          </DialogHeader>
           <img
             key={title}
-            src={`/api/og?title=${encodeURIComponent(title)}`}
+            src={`https://og.kazui.dev/?title=${encodeURIComponent(title)}`}
             alt="OG image preview"
-            className="w-full"
+            className="w-full rounded-lg"
             style={{ aspectRatio: '1200 / 630' }}
           />
-        </div>
-      )}
+        </DialogContent>
+      </Dialog>
 
       <div className="flex border-b border-slate-200 dark:border-slate-800 sm:hidden">
         {(['editor', 'preview'] as const).map((pane) => (

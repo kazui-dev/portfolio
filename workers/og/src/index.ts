@@ -7,8 +7,8 @@ async function getFonts(): Promise<Uint8Array[]> {
 
   const ua = 'Mozilla/5.0 (compatible; bot)'
   const [interRes, notoRes] = await Promise.all([
-    fetch('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap', { headers: { 'User-Agent': ua } }),
-    fetch('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600&display=swap', { headers: { 'User-Agent': ua } }),
+    fetch('https://fonts.googleapis.com/css2?family=Inter:wght@800&display=swap', { headers: { 'User-Agent': ua } }),
+    fetch('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700&display=swap', { headers: { 'User-Agent': ua } }),
   ])
   const [interCss, notoCss] = await Promise.all([interRes.text(), notoRes.text()])
 
@@ -26,13 +26,17 @@ async function getFonts(): Promise<Uint8Array[]> {
   return fontsCache
 }
 
-function estimateCharWidth(ch: string, fontSize: number): number {
+function isCJKChar(ch: string): boolean {
   const code = ch.codePointAt(0) ?? 0
-  const isCJK =
+  return (
     (code >= 0x3000 && code <= 0x9fff) ||
     (code >= 0xac00 && code <= 0xd7af) ||
     (code >= 0xff00 && code <= 0xffef)
-  if (isCJK) return fontSize * 0.85
+  )
+}
+
+function estimateCharWidth(ch: string, fontSize: number): number {
+  if (isCJKChar(ch)) return fontSize * 0.85
   if (ch === ' ') return fontSize * 0.25
   return fontSize * 0.48
 }
@@ -41,15 +45,10 @@ function wrapLines(text: string, maxWidth: number, fontSize: number): string[] {
   const tokens: string[] = []
   let buf = ''
   for (const ch of text) {
-    const code = ch.codePointAt(0) ?? 0
-    const isCJK =
-      (code >= 0x3000 && code <= 0x9fff) ||
-      (code >= 0xac00 && code <= 0xd7af) ||
-      (code >= 0xff00 && code <= 0xffef)
     if (ch === ' ') {
       if (buf) { tokens.push(buf); buf = '' }
       tokens.push(' ')
-    } else if (isCJK) {
+    } else if (isCJKChar(ch)) {
       if (buf) { tokens.push(buf); buf = '' }
       tokens.push(ch)
     } else {
@@ -79,14 +78,19 @@ function wrapLines(text: string, maxWidth: number, fontSize: number): string[] {
   return lines
 }
 
+function renderLine(line: string, x: number, y: number, fontSize: number): string {
+  return `<text x="${x}" y="${y}" font-size="${fontSize}" font-family="'Noto Sans JP',sans-serif" fill="#111111" font-weight="700">${line}</text>`
+}
+
 function buildSvg(title: string): string {
   const fontSize = title.length > 100 ? 44 : title.length > 60 ? 54 : 64
   const escaped = title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
   const cardPad = 80
-  const cardX = 48
-  const cardY = 48
-  const cardW = 1104
+  const cardX = 28
+  const cardY = 28
+  const cardW = 1144
+  const cardH = 574
   const maxTextWidth = cardW - cardPad * 2
   const titleX = cardX + cardPad
   const titleY = cardY + cardPad + fontSize
@@ -94,7 +98,7 @@ function buildSvg(title: string): string {
   const lines = wrapLines(escaped, maxTextWidth, fontSize)
   const lineHeight = fontSize * 1.4
   const textLines = lines
-    .map((line, i) => `<text x="${titleX}" y="${titleY + i * lineHeight}" font-size="${fontSize}" font-family="Inter,system-ui,sans-serif" fill="#111111" font-weight="600">${line}</text>`)
+    .map((line, i) => renderLine(line, titleX, titleY + i * lineHeight, fontSize))
     .join('\n  ')
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
@@ -105,9 +109,9 @@ function buildSvg(title: string): string {
     </linearGradient>
   </defs>
   <rect width="1200" height="630" fill="url(#bg)"/>
-  <rect x="${cardX}" y="${cardY}" width="${cardW}" height="534" rx="24" ry="24" fill="#ffffff"/>
+  <rect x="${cardX}" y="${cardY}" width="${cardW}" height="${cardH}" rx="20" ry="20" fill="#ffffff"/>
   ${textLines}
-  <text x="${cardX + cardW - cardPad}" y="${cardY + 534 - cardPad}" font-size="64" font-weight="800" font-family="Inter,system-ui,sans-serif" fill="#888888" text-anchor="end" letter-spacing="-2">kazui.dev</text>
+  <text x="${cardX + cardW - cardPad}" y="${cardY + cardH - cardPad}" font-size="64" font-weight="800" font-family="Inter,system-ui,sans-serif" fill="#888888" text-anchor="end" letter-spacing="-2">kazui.dev</text>
 </svg>`
 }
 

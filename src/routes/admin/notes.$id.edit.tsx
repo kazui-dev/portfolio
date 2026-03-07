@@ -1,5 +1,5 @@
 import { createFileRoute, notFound, useNavigate, Link } from '@tanstack/react-router';
-import { useState, Suspense, lazy } from 'react';
+import { useState, useCallback, Suspense, lazy } from 'react';
 import { MarkdownHooks } from 'react-markdown';
 import type { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -56,6 +56,7 @@ function RouteComponent() {
   const [isPublished, setIsPublished] = useState(note?.isPublished ?? false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [savedOnce, setSavedOnce] = useState(false);
   const [activePane, setActivePane] = useState<'editor' | 'preview'>('editor');
   const [showOgPreview, setShowOgPreview] = useState(false);
 
@@ -70,7 +71,7 @@ function RouteComponent() {
     setIsPublished(next);
   };
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     if (!title.trim() || !slug.trim()) {
       setSaveError('タイトルとスラッグは必須です');
       return;
@@ -78,7 +79,7 @@ function RouteComponent() {
     setIsSaving(true);
     setSaveError(null);
     try {
-      await upsertNote({
+      const result = await upsertNote({
         data: {
           id: isNew ? undefined : id,
           title: title.trim(),
@@ -88,12 +89,16 @@ function RouteComponent() {
           isPublished,
         },
       });
-      navigate({ to: '/admin/notes' });
+      setSavedOnce(true);
+      if (isNew) {
+        navigate({ to: '/admin/notes/$id/edit', params: { id: result.id }, replace: true });
+      }
     } catch {
       setSaveError('保存に失敗しました。もう一度お試しください。');
+    } finally {
       setIsSaving(false);
     }
-  };
+  }, [title, slug, content, tagsStr, isPublished, isNew, id, navigate]);
 
   const handleDelete = async () => {
     if (!window.confirm('この記事を削除しますか？この操作は取り消せません。')) return;
@@ -204,6 +209,9 @@ function RouteComponent() {
           {saveError && (
             <span className="text-xs text-red-500 dark:text-red-400">{saveError}</span>
           )}
+          {!saveError && savedOnce && !isSaving && (
+            <span className="text-xs text-slate-400 dark:text-slate-500">Saved</span>
+          )}
           {!isNew && (
             <Button variant="secondary" size="sm" onClick={handleDelete}>
               <Trash2 size={14} />
@@ -264,7 +272,7 @@ function RouteComponent() {
               <div className="h-full animate-pulse bg-slate-100 dark:bg-slate-800" />
             }
           >
-            <NoteEditor value={content} onChange={setContent} />
+            <NoteEditor value={content} onChange={setContent} onSave={handleSave} />
           </Suspense>
         </div>
 

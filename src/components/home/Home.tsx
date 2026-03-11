@@ -1,4 +1,4 @@
-import { User, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link, useNavigate } from '@tanstack/react-router';
 import type { Note } from '@/db/schema';
 
@@ -22,19 +22,18 @@ export default function Home({ notes }: { notes: Note[] }) {
             Web技術が好きで、フロントエンド開発やデザインに興味があります。
           </p>
           <div className="flex flex-wrap gap-2 pt-2">
-            <Badge>TypeScript</Badge>
             <Badge>React</Badge>
-            <Badge>Vite</Badge>
+            <Badge>Next.js</Badge>
             <Badge>TanStack Start</Badge>
+            <Badge>Astro</Badge>
+            <Badge>Hono</Badge>
             <Badge>Tailwind CSS</Badge>
             <Badge>Tauri</Badge>
-            <Badge>Electron</Badge>
           </div>
         </div>
         <div className="shrink-0">
           <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm">
-            {/* <img src="/avatar.jpg" alt="Kazui" className="w-full h-full object-cover" /> */}
-            <User size={48} className="text-slate-400 dark:text-slate-500" />
+            <img src="/avatar.png" alt="Kazui" className="w-full h-full object-cover" />
           </div>
         </div>
       </section>

@@ -38,7 +38,7 @@ function isCJKChar(ch: string): boolean {
 function estimateCharWidth(ch: string, fontSize: number): number {
   if (isCJKChar(ch)) return fontSize * 1.0
   if (ch === ' ') return fontSize * 0.25
-  return fontSize * 0.6
+  return fontSize * 0.55
 }
 
 function wrapLines(text: string, maxWidth: number, fontSize: number): string[] {

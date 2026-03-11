@@ -96,7 +96,7 @@ export const baseMarkdownComponents: Components = {
   ),
 }
 
-function formatPublishedDate(date: Date) {
+function formatDate(date: Date) {
   return date.toLocaleDateString('ja-JP').replace(/\//g, '.')
 }
 
@@ -170,8 +170,17 @@ export default function NoteArticle({
             {note.title}
           </h1>
           <div className="flex flex-wrap items-center gap-3 text-sm">
+            {note.updatedAt.getTime() !== note.publishedAt?.getTime() ? (
+              <span className="inline-flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
+                <span className="text-xs font-medium text-slate-400 dark:text-slate-500">Last Updated</span>
+                <time>{formatDate(note.updatedAt)}</time>
+              </span>
+            ) : null}
             {note.publishedAt ? (
-              <time className="text-slate-500 dark:text-slate-400">{formatPublishedDate(note.publishedAt)}</time>
+              <span className="inline-flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
+                <span className="text-xs font-medium text-slate-400 dark:text-slate-500">Published</span>
+                <time>{formatDate(note.publishedAt)}</time>
+              </span>
             ) : null}
             {note.tags.map((tag: string) => (
               <span

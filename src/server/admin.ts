@@ -25,10 +25,13 @@ export const upsertNote = createServerFn({ method: 'POST' })
     content: string;
     tags: string[];
     isPublished: boolean;
+    isUnlisted: boolean;
   }) => input)
   .handler(async ({ data }) => {
     const db = getDb();
     const now = new Date();
+
+    const isUnlisted = data.isPublished ? data.isUnlisted : false;
 
     if (!data.id || data.id === 'new') {
       const id = crypto.randomUUID();
@@ -39,6 +42,7 @@ export const upsertNote = createServerFn({ method: 'POST' })
         content: data.content,
         tags: data.tags,
         isPublished: data.isPublished,
+        isUnlisted,
         publishedAt: data.isPublished ? now : null,
         createdAt: now,
         updatedAt: now,
@@ -60,6 +64,7 @@ export const upsertNote = createServerFn({ method: 'POST' })
       content: data.content,
       tags: data.tags,
       isPublished: data.isPublished,
+      isUnlisted,
       publishedAt,
       updatedAt: now,
     }).where(eq(notes.id, data.id));

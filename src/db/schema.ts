@@ -13,7 +13,9 @@ export const notes = sqliteTable('notes', {
 
   // 公開状態の管理
   isPublished: integer('is_published', { mode: 'boolean' }).notNull().default(false),
-  publishedAt: integer('published_at', { mode: 'timestamp_ms' }), 
+  publishedAt: integer('published_at', { mode: 'timestamp_ms' }),
+  // 限定公開
+  isUnlisted: integer('is_unlisted', { mode: 'boolean' }).notNull().default(false),
   
   // 作成・更新日時 
   createdAt: integer('created_at', { mode: 'timestamp_ms' })

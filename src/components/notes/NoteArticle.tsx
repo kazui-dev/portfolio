@@ -182,6 +182,11 @@ export default function NoteArticle({
                 <time>{formatDate(note.publishedAt)}</time>
               </span>
             ) : null}
+            {note.isUnlisted && note.isPublished && (
+              <span className="text-[10px] font-bold tracking-wider px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200">
+                限定公開
+              </span>
+            )}
             {note.tags.map((tag: string) => (
               <span
                 key={tag}

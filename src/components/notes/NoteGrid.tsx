@@ -34,16 +34,25 @@ export default function NoteGrid({
                     : '未公開'}
                 </time>
                 {showStatus && (
-                  <span
-                    className={cn(
-                      'text-[9px] font-bold tracking-wider px-1.5 py-0.5 rounded',
-                      note.isPublished
-                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                        : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
+                  <>
+                    <span
+                      className={cn(
+                        'text-[9px] font-bold tracking-wider px-1.5 py-0.5 rounded',
+                        note.isPublished
+                          ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                          : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
+                      )}
+                    >
+                      {note.isPublished ? 'Published' : 'Draft'}
+                    </span>
+                    {note.isUnlisted && note.isPublished && (
+                      <span
+                        className="text-[9px] font-bold tracking-wider px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200 ml-1"
+                      >
+                        限定公開
+                      </span>
                     )}
-                  >
-                    {note.isPublished ? 'Published' : 'Draft'}
-                  </span>
+                  </>
                 )}
                 {renderNoteActions?.(note)}
               </div>

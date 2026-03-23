@@ -54,6 +54,7 @@ function RouteComponent() {
   const [content, setContent] = useState(note?.content ?? '');
   const [tagsStr, setTagsStr] = useState(note?.tags.join(', ') ?? '');
   const [isPublished, setIsPublished] = useState(note?.isPublished ?? false);
+  const [isUnlisted, setIsUnlisted] = useState(note?.isUnlisted ?? false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [savedOnce, setSavedOnce] = useState(false);
@@ -87,6 +88,7 @@ function RouteComponent() {
           content,
           tags: tagsStr.split(',').map((t) => t.trim()).filter(Boolean),
           isPublished,
+          isUnlisted: isPublished ? isUnlisted : false,
         },
       });
       setSavedOnce(true);
@@ -98,7 +100,7 @@ function RouteComponent() {
     } finally {
       setIsSaving(false);
     }
-  }, [title, slug, content, tagsStr, isPublished, isNew, id, navigate]);
+  }, [title, slug, content, tagsStr, isPublished, isUnlisted, isNew, id, navigate]);
 
   const handleDelete = async () => {
     if (!window.confirm('この記事を削除しますか？この操作は取り消せません。')) return;
@@ -180,6 +182,35 @@ function RouteComponent() {
             />
           </span>
           <span>{isPublished ? 'Published' : 'Draft'}</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => isPublished && setIsUnlisted((v) => !v)}
+          className={cn(
+            'flex items-center gap-2 text-sm',
+            isPublished ? 'text-slate-700 dark:text-slate-300' : 'text-slate-400 dark:text-slate-600 cursor-not-allowed',
+          )}
+          aria-pressed={isUnlisted && isPublished}
+          disabled={!isPublished}
+        >
+          <span
+            className={cn(
+              'relative inline-flex h-5 w-9 items-center rounded-full transition-colors',
+              isUnlisted && isPublished
+                ? 'bg-slate-700 dark:bg-slate-200'
+                : 'bg-slate-200 dark:bg-slate-700',
+            )}
+          >
+            <span
+              className={cn(
+                'inline-block h-3.5 w-3.5 transform rounded-full transition-transform',
+                isUnlisted && isPublished
+                  ? 'translate-x-4 bg-white dark:bg-slate-900'
+                  : 'translate-x-1 bg-slate-500 dark:bg-slate-400',
+              )}
+            />
+          </span>
+          <span>限定公開</span>
         </button>
 
         {!isNew && isPublished && slug && (

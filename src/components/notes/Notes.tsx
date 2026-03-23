@@ -32,10 +32,11 @@ export default function Notes({ selectedTag, initialNotes }: { selectedTag?: str
 
   const processedNotes = useMemo(() => {
     if (!initialNotes) return [];
+    // unlisted記事は除外
+    const visibleNotes = initialNotes.filter(n => !n.isUnlisted);
     const filtered = currentTags.length > 0 
-      ? initialNotes.filter(n => currentTags.every(t => n.tags.includes(t))) 
-      : initialNotes;
-    
+      ? visibleNotes.filter(n => currentTags.every(t => n.tags.includes(t))) 
+      : visibleNotes;
     return [...filtered].sort((a, b) => {
       const timeA = a.publishedAt?.getTime() || 0;
       const timeB = b.publishedAt?.getTime() || 0;

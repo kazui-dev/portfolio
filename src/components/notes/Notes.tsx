@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import { useState, useMemo } from 'react';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { X, Filter, ArrowUpDown } from 'lucide-react';

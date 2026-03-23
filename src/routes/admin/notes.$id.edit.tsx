@@ -210,7 +210,7 @@ function RouteComponent() {
               )}
             />
           </span>
-          <span>限定公開</span>
+          <span>Unlisted</span>
         </button>
 
         {!isNew && isPublished && slug && (

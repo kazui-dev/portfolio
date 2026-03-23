@@ -27,7 +27,7 @@ export default function NoteGrid({
             className="group relative flex flex-col justify-between p-4 sm:p-5 bg-white dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-sm transition-all h-full"
           >
             <div className="space-y-2 mb-4">
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center gap-1 flex-wrap">
                 <time className="text-[10px] sm:text-xs font-medium text-slate-500 dark:text-slate-400">
                   {note.publishedAt
                     ? note.publishedAt.toLocaleDateString('ja-JP').replace(/\//g, '.')
@@ -47,9 +47,9 @@ export default function NoteGrid({
                     </span>
                     {note.isUnlisted && note.isPublished && (
                       <span
-                        className="text-[9px] font-bold tracking-wider px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200 ml-1"
+                        className="text-[9px] font-bold tracking-wider px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200"
                       >
-                        限定公開
+                        Unlisted
                       </span>
                     )}
                   </>

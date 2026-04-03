@@ -31,7 +31,8 @@ export const Route = createRootRoute({
       { name: 'twitter:image', content: 'https://kazui.dev/ogp-image.png' },
     ],
     links: [
-      { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+      { rel: 'icon', type: 'image/png', href: '/favicon.png' },
+      { rel: 'apple-touch-icon', href: '/favicon.png' },
       { rel: 'stylesheet', href: appCss },
     ],
   }),

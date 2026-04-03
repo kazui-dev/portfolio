@@ -35,9 +35,11 @@ export const Route = createFileRoute('/notes/$slug')({
         { title },
         { name: 'description', content: '' },
         { property: 'og:title', content: title },
+        { property: 'og:description', content: '' },
         ...(ogImage ? [{ property: 'og:image', content: ogImage }] : []),
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: title },
+        { name: 'twitter:description', content: '' },
         ...(ogImage ? [{ name: 'twitter:image', content: ogImage }] : []),
       ],
     }

@@ -15,10 +15,10 @@ export default function Home({ notes }: { notes: Note[] }) {
       <section className="flex flex-col-reverse md:flex-row items-start md:items-center justify-between gap-8 md:gap-12">
         <div className="flex-1 space-y-5">
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight">
-            Hi, I'm Kazui
+            Hi, I'm kazui
           </h1>
           <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-            情報科高校に通う学生です。<br />
+            東京電機大学の情報システム工学科に通う学生です。<br />
             Web技術が好きで、フロントエンド開発やデザインに興味があります。
           </p>
           <div className="flex flex-wrap gap-2 pt-2">

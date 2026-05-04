@@ -9,7 +9,7 @@ import { ChevronLeft, Save, Trash2, ExternalLink, Image } from 'lucide-react';
 import { getNoteById, upsertNote, deleteNote } from '@/server/admin';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { baseMarkdownComponents, prettyCodeOptions } from '@/components/notes/NoteArticle';
+import { baseMarkdownComponents, prettyCodeOptions } from '@/components/notes/noteMarkdown';
 import { cn } from '@/lib/utils';
 
 const NoteEditor = lazy(() => import('@/components/admin/NoteEditor'));

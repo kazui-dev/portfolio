@@ -13,7 +13,7 @@ export const Route = createFileRoute('/notes/$slug')({
   head: ({ loaderData }) => {
     const title = `${loaderData?.note.title ?? 'Notes'} - kazui.dev`
     const ogImage = loaderData?.note.title
-      ? `https://og.kazui.dev/?title=${encodeURIComponent(loaderData.note.title)}`
+      ? `https://og.kazui.dev/notes/?title=${encodeURIComponent(loaderData.note.title)}`
       : undefined
 
     return {

@@ -105,6 +105,10 @@ export default {
     }
 
     const url = new URL(request.url)
+    const ogNotesPath = '/notes'
+    if (url.pathname !== ogNotesPath && url.pathname !== `${ogNotesPath}/`) {
+      return new Response('Not Found', { status: 404 })
+    }
     const title = url.searchParams.get('title') ?? 'kazui.dev'
     const svg = buildSvg(title)
 

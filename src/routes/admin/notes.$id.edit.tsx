@@ -1,12 +1,12 @@
 import { createFileRoute, notFound, useNavigate, Link } from '@tanstack/react-router';
-import { useState, useCallback, Suspense, lazy } from 'react';
+import { useState, useCallback, Suspense, lazy, useRef, type ChangeEvent } from 'react';
 import { MarkdownHooks } from 'react-markdown';
 import type { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import rehypePrettyCode from 'rehype-pretty-code';
-import { ChevronLeft, Save, Trash2, ExternalLink, Image } from 'lucide-react';
-import { getNoteById, upsertNote, deleteNote } from '@/server/admin';
+import { ChevronLeft, Save, Trash2, ExternalLink, Image, ImagePlus, Loader2 } from 'lucide-react';
+import { getNoteById, upsertNote, deleteNote, uploadNoteImage } from '@/server/admin';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { baseMarkdownComponents, prettyCodeOptions } from '@/components/notes/noteMarkdown';
@@ -57,9 +57,12 @@ function RouteComponent() {
   const [isUnlisted, setIsUnlisted] = useState(note?.isUnlisted ?? false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [imageUploadError, setImageUploadError] = useState<string | null>(null);
   const [savedOnce, setSavedOnce] = useState(false);
   const [activePane, setActivePane] = useState<'editor' | 'preview'>('editor');
   const [showOgPreview, setShowOgPreview] = useState(false);
+  const imageInputRef = useRef<HTMLInputElement | null>(null);
 
   const isNew = id === 'new';
 
@@ -112,6 +115,42 @@ function RouteComponent() {
     }
   };
 
+  const handleClickInsertImage = () => {
+    imageInputRef.current?.click();
+  };
+
+  const handleImageSelected = async (event: ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    event.target.value = '';
+    if (!selectedFile) {
+      return;
+    }
+
+    setIsUploadingImage(true);
+    setImageUploadError(null);
+
+    try {
+      const uploaded = await uploadNoteImage({
+        data: {
+          fileName: selectedFile.name,
+          mimeType: selectedFile.type,
+          base64Data: await fileToBase64(selectedFile),
+          noteId: isNew ? undefined : id,
+          noteSlug: slug.trim() || undefined,
+        },
+      });
+
+      setContent((current) => {
+        const trimmed = current.trimEnd();
+        return trimmed ? `${trimmed}\n\n${uploaded.markdown}\n` : `${uploaded.markdown}\n`;
+      });
+    } catch {
+      setImageUploadError('画像アップロードに失敗しました。R2設定と公開URLを確認してください。');
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
+
   const inputClass =
     'w-full rounded-md border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-sm text-slate-800 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-400 dark:focus:ring-slate-600';
 
@@ -132,6 +171,13 @@ function RouteComponent() {
       </nav>
 
       <div className="space-y-3">
+        <input
+          ref={imageInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleImageSelected}
+        />
         <input
           type="text"
           placeholder="Title"
@@ -236,7 +282,20 @@ function RouteComponent() {
           </button>
         )}
 
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={handleClickInsertImage}
+          disabled={isUploadingImage}
+        >
+          {isUploadingImage ? <Loader2 size={14} className="animate-spin" /> : <ImagePlus size={14} />}
+          {isUploadingImage ? 'Uploading…' : 'Insert Image'}
+        </Button>
+
         <div className="flex items-center gap-2 ml-auto">
+          {imageUploadError && (
+            <span className="text-xs text-red-500 dark:text-red-400">{imageUploadError}</span>
+          )}
           {saveError && (
             <span className="text-xs text-red-500 dark:text-red-400">{saveError}</span>
           )}
@@ -266,7 +325,7 @@ function RouteComponent() {
           </DialogHeader>
           <img
             key={title}
-            src={`https://og.kazui.dev/?title=${encodeURIComponent(title)}`}
+            src={`https://og.kazui.dev/notes/?title=${encodeURIComponent(title)}`}
             alt="OG image preview"
             className="w-full rounded-lg"
             style={{ aspectRatio: '1200 / 630' }}
@@ -310,7 +369,7 @@ function RouteComponent() {
         <div
           className={cn(
             'h-full overflow-y-auto border border-slate-200 dark:border-slate-800 rounded-xl p-5',
-            'space-y-5 text-[15px] text-slate-700 dark:text-slate-300 leading-7',
+            'space-y-5 text-[15px] text-slate-700 dark:text-slate-200 leading-7',
             activePane !== 'preview' && 'hidden sm:block',
           )}
         >
@@ -333,3 +392,13 @@ function RouteComponent() {
   );
 }
 
+async function fileToBase64(file: File) {
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  let binary = '';
+
+  for (const byte of bytes) {
+    binary += String.fromCharCode(byte);
+  }
+
+  return btoa(binary);
+}

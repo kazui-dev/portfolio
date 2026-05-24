@@ -79,6 +79,14 @@ export const baseMarkdownComponents: Components = {
       {children}
     </blockquote>
   ),
+  img: ({ src, alt }) => (
+    <img
+      src={src}
+      alt={alt ?? ''}
+      loading="lazy"
+      className="w-full rounded-xl border border-slate-200 dark:border-slate-800"
+    />
+  ),
 }
 
 export function createNoteMarkdownComponents(tocItems: TocItem[]): Components {

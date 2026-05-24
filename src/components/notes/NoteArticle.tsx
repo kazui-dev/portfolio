@@ -75,7 +75,7 @@ export default function NoteArticle({
           </div>
         </header>
 
-        <div className="space-y-5 text-[15px] text-slate-700 dark:text-slate-300 leading-7 wrap-break-words">
+        <div className="space-y-5 text-[15px] text-slate-700 dark:text-slate-200 leading-7 wrap-break-words">
           <div dangerouslySetInnerHTML={{ __html: renderedContentHtml }} />
         </div>
 

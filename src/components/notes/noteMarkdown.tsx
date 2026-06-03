@@ -1,3 +1,4 @@
+import { Children, isValidElement } from 'react'
 import type { Components } from 'react-markdown'
 import { cn } from '@/lib/utils'
 import { createHeadingIdFactory, getTextFromNode, type TocItem } from './toc'
@@ -16,7 +17,21 @@ export const baseMarkdownComponents: Components = {
       {children}
     </h1>
   ),
-  p: ({ children }) => <p className="leading-7">{children}</p>,
+  p: ({ children }) => {
+    const nodes = Children.toArray(children).filter((child) => {
+      if (typeof child === 'string') {
+        return child.trim().length > 0
+      }
+      return true
+    })
+    const isImageOnly = nodes.length === 1 && isValidElement(nodes[0]) && nodes[0].type === 'img'
+
+    if (isImageOnly) {
+      return <div className="my-3">{children}</div>
+    }
+
+    return <p className="leading-7">{children}</p>
+  },
   ul: ({ children }) => <ul className="list-disc pl-6 space-y-0.5">{children}</ul>,
   ol: ({ children }) => <ol className="list-decimal pl-6 space-y-0.5">{children}</ol>,
   li: ({ children }) => <li>{children}</li>,
@@ -84,7 +99,7 @@ export const baseMarkdownComponents: Components = {
       src={src}
       alt={alt ?? ''}
       loading="lazy"
-      className="block w-full max-w-[70%] sm:max-w-[45%] ml-0 mr-auto my-3 rounded-xl border border-slate-200 dark:border-slate-800"
+      className="block w-full max-w-[70%] sm:max-w-[45%] ml-0 mr-auto rounded-xl border border-slate-200 dark:border-slate-800"
     />
   ),
 }

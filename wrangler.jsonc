@@ -5,7 +5,7 @@
   "compatibility_flags": ["nodejs_compat"],
   "main": "@tanstack/react-start/server-entry",
   "vars": {
-    "STORAGE_PUBLIC_BASE_URL": "https://your-url"
+    "STORAGE_PUBLIC_BASE_URL": "https://kazui.dev/storage/"
   },
   "d1_databases": [
     {

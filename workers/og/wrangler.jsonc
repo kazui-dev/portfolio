@@ -3,5 +3,12 @@
   "name": "portfolio-og",
   "compatibility_date": "2025-09-02",
   "compatibility_flags": ["nodejs_compat"],
-  "main": "src/index.ts"
+  "main": "src/index.ts",
+  "routes": [
+    {
+      "pattern": "og.kazui.dev",
+      "zone_name": "kazui.dev",
+      "custom_domain": true
+    }
+  ]
 }

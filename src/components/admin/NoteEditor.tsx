@@ -14,9 +14,10 @@ type NoteEditorProps = {
   value: string;
   onChange: (value: string) => void;
   onSave?: () => void;
+  onSelectionChange?: (selection: { from: number; to: number }) => void;
 };
 
-export default function NoteEditor({ value, onChange, onSave }: NoteEditorProps) {
+export default function NoteEditor({ value, onChange, onSave, onSelectionChange }: NoteEditorProps) {
   const { resolvedTheme } = useTheme();
 
   const saveKeymap = useMemo(
@@ -27,11 +28,23 @@ export default function NoteEditor({ value, onChange, onSave }: NoteEditorProps)
     [onSave],
   );
 
+  const selectionListener = useMemo(
+    () =>
+      onSelectionChange
+        ? EditorView.updateListener.of((update) => {
+          if (!update.selectionSet) return;
+          const { from, to } = update.state.selection.main;
+          onSelectionChange({ from, to });
+        })
+        : [],
+    [onSelectionChange],
+  );
+
   return (
     <CodeMirror
       value={value}
       onChange={onChange}
-      extensions={[markdown({ codeLanguages: [] }), contentPadding, EditorView.lineWrapping, saveKeymap]}
+      extensions={[markdown({ codeLanguages: [] }), contentPadding, EditorView.lineWrapping, saveKeymap, selectionListener]}
       theme={resolvedTheme === 'dark' ? githubDark : githubLight}
       height="100%"
       className="h-full text-sm"

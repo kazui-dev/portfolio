@@ -30,6 +30,37 @@ const previewComponents: Components = {
   ol: ({ children }) => <ol className="list-decimal pl-6 space-y-0.5">{children}</ol>,
 };
 
+const MAX_IMAGE_SIZE_BYTES = 10 * 1024 * 1024;
+const ALLOWED_IMAGE_MIME_TYPES = new Set([
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/webp',
+  'image/gif',
+  'image/avif',
+  'image/svg+xml',
+]);
+
+const IMAGE_EXTENSION_TO_MIME: Record<string, string> = {
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  png: 'image/png',
+  webp: 'image/webp',
+  gif: 'image/gif',
+  avif: 'image/avif',
+  svg: 'image/svg+xml',
+};
+
+function inferImageMimeType(file: File) {
+  if (file.type) return file.type;
+  const ext = file.name.trim().split('.').at(-1)?.toLowerCase();
+  return ext ? IMAGE_EXTENSION_TO_MIME[ext] : undefined;
+}
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max);
+}
+
 export const Route = createFileRoute('/admin/notes/$id/edit')({
   loader: async ({ params }) => {
     const { id } = params;
@@ -63,6 +94,7 @@ function RouteComponent() {
   const [activePane, setActivePane] = useState<'editor' | 'preview'>('editor');
   const [showOgPreview, setShowOgPreview] = useState(false);
   const imageInputRef = useRef<HTMLInputElement | null>(null);
+  const editorSelectionRef = useRef<{ from: number; to: number } | null>(null);
 
   const isNew = id === 'new';
 
@@ -74,6 +106,36 @@ function RouteComponent() {
     if (!window.confirm(message)) return;
     setIsPublished(next);
   };
+
+  const handleEditorSelectionChange = useCallback((selection: { from: number; to: number }) => {
+    editorSelectionRef.current = selection;
+  }, []);
+
+  const insertMarkdownAtSelection = useCallback((markdown: string) => {
+    setContent((current) => {
+      const selection = editorSelectionRef.current;
+      const length = current.length;
+      const from = clamp(selection?.from ?? length, 0, length);
+      const to = clamp(selection?.to ?? length, 0, length);
+      const before = current.slice(0, from);
+      const after = current.slice(to);
+
+      const leading = before
+        ? before.endsWith('\n\n')
+          ? ''
+          : before.endsWith('\n')
+            ? '\n'
+            : '\n\n'
+        : '';
+      const trailing = after
+        ? after.startsWith('\n')
+          ? ''
+          : '\n'
+        : '\n';
+
+      return `${before}${leading}${markdown}${trailing}${after}`;
+    });
+  }, []);
 
   const handleSave = useCallback(async () => {
     if (!title.trim() || !slug.trim()) {
@@ -126,6 +188,17 @@ function RouteComponent() {
       return;
     }
 
+    const mimeType = inferImageMimeType(selectedFile);
+    if (!mimeType || !ALLOWED_IMAGE_MIME_TYPES.has(mimeType)) {
+      setImageUploadError('サポート外の画像形式です。jpg / png / webp / gif / avif / svg を使用してください。');
+      return;
+    }
+
+    if (selectedFile.size > MAX_IMAGE_SIZE_BYTES) {
+      setImageUploadError('画像サイズが大きすぎます。10MB以下にしてください。');
+      return;
+    }
+
     setIsUploadingImage(true);
     setImageUploadError(null);
 
@@ -133,19 +206,19 @@ function RouteComponent() {
       const uploaded = await uploadNoteImage({
         data: {
           fileName: selectedFile.name,
-          mimeType: selectedFile.type,
+          mimeType,
           base64Data: await fileToBase64(selectedFile),
           noteId: isNew ? undefined : id,
           noteSlug: slug.trim() || undefined,
         },
       });
 
-      setContent((current) => {
-        const trimmed = current.trimEnd();
-        return trimmed ? `${trimmed}\n\n${uploaded.markdown}\n` : `${uploaded.markdown}\n`;
-      });
-    } catch {
-      setImageUploadError('画像アップロードに失敗しました。R2設定と公開URLを確認してください。');
+      insertMarkdownAtSelection(uploaded.markdown);
+    } catch (error) {
+      const message = error instanceof Error && error.message
+        ? error.message
+        : '画像アップロードに失敗しました。R2設定と公開URLを確認してください。';
+      setImageUploadError(message);
     } finally {
       setIsUploadingImage(false);
     }
@@ -362,7 +435,12 @@ function RouteComponent() {
               <div className="h-full animate-pulse bg-slate-100 dark:bg-slate-800" />
             }
           >
-            <NoteEditor value={content} onChange={setContent} onSave={handleSave} />
+            <NoteEditor
+              value={content}
+              onChange={setContent}
+              onSave={handleSave}
+              onSelectionChange={handleEditorSelectionChange}
+            />
           </Suspense>
         </div>
 

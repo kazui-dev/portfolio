@@ -98,6 +98,7 @@ type R2ImagesEnv = {
 const MAX_IMAGE_SIZE_BYTES = 10 * 1024 * 1024;
 const ALLOWED_IMAGE_MIME_TYPES = new Set([
   'image/jpeg',
+  'image/jpg',
   'image/png',
   'image/webp',
   'image/gif',
@@ -190,6 +191,7 @@ function normalizePathSegment(value: string) {
 function detectImageExtension(mimeType: string, fileName: string) {
   const byMimeType: Record<string, string> = {
     'image/jpeg': 'jpg',
+    'image/jpg': 'jpg',
     'image/png': 'png',
     'image/webp': 'webp',
     'image/gif': 'gif',

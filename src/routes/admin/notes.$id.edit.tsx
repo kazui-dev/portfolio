@@ -31,6 +31,8 @@ const previewComponents: Components = {
 };
 
 const MAX_IMAGE_SIZE_BYTES = 10 * 1024 * 1024;
+const MAX_IMAGE_DIMENSION = 1600;
+const IMAGE_OPTIMIZATION_QUALITY = 0.82;
 const ALLOWED_IMAGE_MIME_TYPES = new Set([
   'image/jpeg',
   'image/jpg',
@@ -39,6 +41,12 @@ const ALLOWED_IMAGE_MIME_TYPES = new Set([
   'image/gif',
   'image/avif',
   'image/svg+xml',
+]);
+const OPTIMIZABLE_IMAGE_MIME_TYPES = new Set([
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/webp',
 ]);
 
 const IMAGE_EXTENSION_TO_MIME: Record<string, string> = {
@@ -52,13 +60,105 @@ const IMAGE_EXTENSION_TO_MIME: Record<string, string> = {
 };
 
 function inferImageMimeType(file: File) {
-  if (file.type) return file.type;
+  if (file.type) return file.type === 'image/jpg' ? 'image/jpeg' : file.type;
   const ext = file.name.trim().split('.').at(-1)?.toLowerCase();
   return ext ? IMAGE_EXTENSION_TO_MIME[ext] : undefined;
 }
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
+}
+
+function supportsWebpEncoding() {
+  if (typeof document === 'undefined') return false;
+  const canvas = document.createElement('canvas');
+  return canvas.toDataURL('image/webp').startsWith('data:image/webp');
+}
+
+function getOptimizedMimeType(sourceMimeType: string) {
+  if (supportsWebpEncoding()) return 'image/webp';
+  return sourceMimeType === 'image/png' ? 'image/png' : 'image/jpeg';
+}
+
+function replaceFileExtension(fileName: string, extension: string) {
+  const baseName = fileName.replace(/\.[^/.]+$/, '');
+  return `${baseName || 'image'}.${extension}`;
+}
+
+async function loadImageElement(file: File) {
+  const objectUrl = URL.createObjectURL(file);
+  const image = document.createElement('img');
+  image.decoding = 'async';
+  image.src = objectUrl;
+
+  try {
+    await image.decode();
+  } catch {
+    await new Promise<void>((resolve, reject) => {
+      image.onload = () => resolve();
+      image.onerror = () => reject(new Error('画像の読み込みに失敗しました。'));
+    });
+  } finally {
+    URL.revokeObjectURL(objectUrl);
+  }
+
+  return image;
+}
+
+async function canvasToBlob(canvas: HTMLCanvasElement, mimeType: string, quality: number) {
+  return new Promise<Blob | null>((resolve) => {
+    canvas.toBlob(resolve, mimeType, quality);
+  });
+}
+
+async function optimizeImageFile(file: File, mimeType: string) {
+  if (typeof document === 'undefined' || !OPTIMIZABLE_IMAGE_MIME_TYPES.has(mimeType)) {
+    return { file, mimeType };
+  }
+
+  const targetMimeType = getOptimizedMimeType(mimeType);
+  const image = typeof createImageBitmap === 'function'
+    ? await createImageBitmap(file)
+    : await loadImageElement(file);
+  const isHtmlImage = 'naturalWidth' in image;
+  const sourceWidth = isHtmlImage ? image.naturalWidth : image.width;
+  const sourceHeight = isHtmlImage ? image.naturalHeight : image.height;
+  const maxDimension = Math.max(sourceWidth, sourceHeight);
+  const scale = maxDimension > MAX_IMAGE_DIMENSION ? MAX_IMAGE_DIMENSION / maxDimension : 1;
+  const targetWidth = Math.max(1, Math.round(sourceWidth * scale));
+  const targetHeight = Math.max(1, Math.round(sourceHeight * scale));
+  const shouldResize = targetWidth !== sourceWidth || targetHeight !== sourceHeight;
+
+  if (!shouldResize && targetMimeType === mimeType) {
+    if ('close' in image) image.close();
+    return { file, mimeType };
+  }
+
+  const canvas = document.createElement('canvas');
+  canvas.width = targetWidth;
+  canvas.height = targetHeight;
+  const context = canvas.getContext('2d', { alpha: true });
+
+  if (!context) {
+    if ('close' in image) image.close();
+    return { file, mimeType };
+  }
+
+  context.drawImage(image as CanvasImageSource, 0, 0, targetWidth, targetHeight);
+  if ('close' in image) image.close();
+
+  const blob = await canvasToBlob(canvas, targetMimeType, IMAGE_OPTIMIZATION_QUALITY);
+  if (!blob) {
+    return { file, mimeType };
+  }
+
+  const extension = targetMimeType.split('/').at(-1) ?? 'webp';
+  const optimizedFile = new File([blob], replaceFileExtension(file.name, extension), { type: targetMimeType });
+  if (!shouldResize && blob.size >= file.size) {
+    return { file, mimeType };
+  }
+
+  return { file: optimizedFile, mimeType: targetMimeType };
 }
 
 export const Route = createFileRoute('/admin/notes/$id/edit')({
@@ -194,20 +294,21 @@ function RouteComponent() {
       return;
     }
 
-    if (selectedFile.size > MAX_IMAGE_SIZE_BYTES) {
-      setImageUploadError('画像サイズが大きすぎます。10MB以下にしてください。');
-      return;
-    }
-
     setIsUploadingImage(true);
     setImageUploadError(null);
 
     try {
+      const { file: optimizedFile, mimeType: optimizedMimeType } = await optimizeImageFile(selectedFile, mimeType);
+      if (optimizedFile.size > MAX_IMAGE_SIZE_BYTES) {
+        setImageUploadError('画像サイズが大きすぎます。10MB以下にしてください。');
+        return;
+      }
+
       const uploaded = await uploadNoteImage({
         data: {
-          fileName: selectedFile.name,
-          mimeType,
-          base64Data: await fileToBase64(selectedFile),
+          fileName: optimizedFile.name,
+          mimeType: optimizedMimeType,
+          base64Data: await fileToBase64(optimizedFile),
           noteId: isNew ? undefined : id,
           noteSlug: slug.trim() || undefined,
         },
@@ -470,7 +571,7 @@ function RouteComponent() {
   );
 }
 
-async function fileToBase64(file: File) {
+async function fileToBase64(file: Blob) {
   const bytes = new Uint8Array(await file.arrayBuffer());
   let binary = '';
 

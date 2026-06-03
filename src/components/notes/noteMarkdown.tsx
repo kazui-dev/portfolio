@@ -84,7 +84,7 @@ export const baseMarkdownComponents: Components = {
       src={src}
       alt={alt ?? ''}
       loading="lazy"
-      className="w-full sm:w-auto sm:max-w-[50%] sm:mx-auto rounded-xl border border-slate-200 dark:border-slate-800"
+      className="block w-full max-w-[70%] sm:max-w-[45%] ml-0 mr-auto my-6 rounded-xl border border-slate-200 dark:border-slate-800"
     />
   ),
 }

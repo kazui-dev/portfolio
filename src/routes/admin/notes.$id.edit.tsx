@@ -31,7 +31,7 @@ const previewComponents: Components = {
 };
 
 const MAX_IMAGE_SIZE_BYTES = 10 * 1024 * 1024;
-const MAX_IMAGE_DIMENSION = 1600;
+const MAX_IMAGE_DIMENSION = 800;
 const IMAGE_OPTIMIZATION_QUALITY = 0.82;
 const ALLOWED_IMAGE_MIME_TYPES = new Set([
   'image/jpeg',

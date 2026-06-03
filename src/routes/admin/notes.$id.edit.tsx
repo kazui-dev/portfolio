@@ -17,7 +17,7 @@ const NoteEditor = lazy(() => import('@/components/admin/NoteEditor'));
 const previewComponents: Components = {
   ...baseMarkdownComponents,
   h2: ({ children }) => (
-    <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-50 mt-5 mb-2">
+    <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-50 mt-5 mb-2 border-b border-slate-200 dark:border-slate-700 pb-1">
       {children}
     </h2>
   ),

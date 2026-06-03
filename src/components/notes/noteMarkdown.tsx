@@ -84,7 +84,7 @@ export const baseMarkdownComponents: Components = {
       src={src}
       alt={alt ?? ''}
       loading="lazy"
-      className="block w-full max-w-[70%] sm:max-w-[45%] ml-0 mr-auto my-6 rounded-xl border border-slate-200 dark:border-slate-800"
+      className="block w-full max-w-[70%] sm:max-w-[45%] ml-0 mr-auto my-3 rounded-xl border border-slate-200 dark:border-slate-800"
     />
   ),
 }
@@ -111,7 +111,10 @@ export function createNoteMarkdownComponents(tocItems: TocItem[]): Components {
       const id = getNextHeadingId(text)
 
       return (
-        <h2 id={id} className="scroll-mt-24 text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-50 mt-8 mb-3">
+        <h2
+          id={id}
+          className="scroll-mt-24 text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-50 mt-8 mb-3 border-b border-slate-200 dark:border-slate-700 pb-1"
+        >
           {children}
         </h2>
       )

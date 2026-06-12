@@ -156,7 +156,7 @@ export const uploadNoteImage = createServerFn({ method: 'POST' })
     return {
       key: objectKey,
       url: imageUrl,
-      markdown: `![${altText}](${imageUrl})`,
+      markdown: `![${altText}](${imageUrl} =800x)`,
     };
   });
 

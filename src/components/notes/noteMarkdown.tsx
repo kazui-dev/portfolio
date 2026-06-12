@@ -11,6 +11,38 @@ export const prettyCodeOptions = {
   keepBackground: false,
 } as const
 
+const IMAGE_WIDTH_HINT_TITLE_PREFIX = 'width='
+
+export function normalizeNoteMarkdown(content: string) {
+  const lines = content.split('\n')
+  let isInFence = false
+
+  return lines
+    .map((line) => {
+      const trimmed = line.trim()
+
+      if (trimmed.startsWith('```')) {
+        isInFence = !isInFence
+        return line
+      }
+
+      if (isInFence) {
+        return line
+      }
+
+      return line.replace(
+        /!\[([^\]]*)\]\(([^)\s]+)\s*=\s*(\d+)x\)/g,
+        (_match, altText: string, src: string, width: string) => `![${altText}](${src} "${IMAGE_WIDTH_HINT_TITLE_PREFIX}${width}")`,
+      )
+    })
+    .join('\n')
+}
+
+export function parseImageWidthHint(title?: string | null) {
+  const match = new RegExp(`^${IMAGE_WIDTH_HINT_TITLE_PREFIX}(\\d+)$`, 'i').exec(title?.trim() ?? '')
+  return match ? Number(match[1]) : null
+}
+
 export const baseMarkdownComponents: Components = {
   h1: ({ children }) => (
     <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-50 mt-10 first:mt-0 mb-4">
@@ -94,14 +126,30 @@ export const baseMarkdownComponents: Components = {
       {children}
     </blockquote>
   ),
-  img: ({ src, alt }) => (
-    <img
-      src={src}
-      alt={alt ?? ''}
-      loading="lazy"
-      className="block w-full max-w-[70%] sm:max-w-[45%] ml-0 mr-auto rounded-xl border border-slate-200 dark:border-slate-800"
-    />
-  ),
+  img: ({ src, alt, title }) => {
+    const width = parseImageWidthHint(title)
+
+    if (width) {
+      return (
+        <img
+          src={src}
+          alt={alt ?? ''}
+          loading="lazy"
+          className="block h-auto ml-0 mr-auto rounded-xl border border-slate-200 dark:border-slate-800"
+          style={{ width: '100%', maxWidth: `${width}px` }}
+        />
+      )
+    }
+
+    return (
+      <img
+        src={src}
+        alt={alt ?? ''}
+        loading="lazy"
+        className="block w-full max-w-[70%] sm:max-w-[45%] ml-0 mr-auto rounded-xl border border-slate-200 dark:border-slate-800"
+      />
+    )
+  },
 }
 
 export function createNoteMarkdownComponents(tocItems: TocItem[]): Components {

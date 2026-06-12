@@ -9,7 +9,7 @@ import { ChevronLeft, Save, Trash2, ExternalLink, Image, ImagePlus, Loader2 } fr
 import { getNoteById, upsertNote, deleteNote, uploadNoteImage } from '@/server/admin';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { baseMarkdownComponents, prettyCodeOptions } from '@/components/notes/noteMarkdown';
+import { baseMarkdownComponents, normalizeNoteMarkdown, prettyCodeOptions } from '@/components/notes/noteMarkdown';
 import { cn } from '@/lib/utils';
 
 const NoteEditor = lazy(() => import('@/components/admin/NoteEditor'));
@@ -31,7 +31,7 @@ const previewComponents: Components = {
 };
 
 const MAX_IMAGE_SIZE_BYTES = 10 * 1024 * 1024;
-const MAX_IMAGE_DIMENSION = 800;
+const MAX_IMAGE_DIMENSION = 1200;
 const IMAGE_OPTIMIZATION_QUALITY = 0.82;
 const ALLOWED_IMAGE_MIME_TYPES = new Set([
   'image/jpeg',
@@ -558,7 +558,7 @@ function RouteComponent() {
               rehypePlugins={[[rehypePrettyCode, prettyCodeOptions]]}
               components={previewComponents}
             >
-              {content}
+              {normalizeNoteMarkdown(content)}
             </MarkdownHooks>
           ) : (
             <p className="text-slate-400 dark:text-slate-600 text-sm">

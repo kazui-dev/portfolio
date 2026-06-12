@@ -140,17 +140,13 @@ function visitImageNodes(node: { type?: string; children?: unknown[]; url?: stri
 
   if (node.type === 'image') {
     const url = node.url?.trim() ?? ''
-    const widthMatch = /^(.*?)(?:\s*=\s*(\d+)x)\s*$/.exec(url)
+    const widthMatch = /(\?(?:.*&)?(?:w|width)=(\d+))/.exec(url)
 
     if (widthMatch) {
-      node.url = widthMatch[1].trim()
-      node.title = `${IMAGE_WIDTH_HINT_TITLE_PREFIX}${widthMatch[2]}`
-      return
-    }
-
-    const titleMatch = /^\s*=\s*(\d+)x\s*$/.exec(node.title?.trim() ?? '')
-    if (titleMatch) {
-      node.title = `${IMAGE_WIDTH_HINT_TITLE_PREFIX}${titleMatch[1]}`
+      const fullQuery = widthMatch[1]
+      const widthValue = widthMatch[2]
+      node.url = url.replace(fullQuery, '')
+      node.title = `${IMAGE_WIDTH_HINT_TITLE_PREFIX}${widthValue}`
     }
     return
   }

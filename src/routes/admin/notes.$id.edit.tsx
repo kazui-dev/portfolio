@@ -314,7 +314,8 @@ function RouteComponent() {
         },
       });
 
-      insertMarkdownAtSelection(uploaded.markdown);
+      const markdownStr = uploaded.markdown.replace(/ = (\d+)x\)$/, '?w=$1)');
+      insertMarkdownAtSelection(markdownStr);
     } catch (error) {
       const message = error instanceof Error && error.message
         ? error.message

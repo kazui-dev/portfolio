@@ -9,7 +9,7 @@ import { ChevronLeft, Save, Trash2, ExternalLink, Image, ImagePlus, Loader2 } fr
 import { getNoteById, upsertNote, deleteNote, uploadNoteImage } from '@/server/admin';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { baseMarkdownComponents, normalizeNoteMarkdown, prettyCodeOptions } from '@/components/notes/noteMarkdown';
+import { baseMarkdownComponents, prettyCodeOptions, remarkImageWidthHint } from '@/components/notes/noteMarkdown';
 import { cn } from '@/lib/utils';
 
 const NoteEditor = lazy(() => import('@/components/admin/NoteEditor'));
@@ -554,11 +554,11 @@ function RouteComponent() {
         >
           {content ? (
             <MarkdownHooks
-              remarkPlugins={[remarkGfm, remarkBreaks]}
+              remarkPlugins={[remarkGfm, remarkBreaks, remarkImageWidthHint]}
               rehypePlugins={[[rehypePrettyCode, prettyCodeOptions]]}
               components={previewComponents}
             >
-              {normalizeNoteMarkdown(content)}
+              {content}
             </MarkdownHooks>
           ) : (
             <p className="text-slate-400 dark:text-slate-600 text-sm">

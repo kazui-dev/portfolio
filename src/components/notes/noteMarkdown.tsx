@@ -13,29 +13,10 @@ export const prettyCodeOptions = {
 
 const IMAGE_WIDTH_HINT_TITLE_PREFIX = 'width='
 
-export function normalizeNoteMarkdown(content: string) {
-  const lines = content.split('\n')
-  let isInFence = false
-
-  return lines
-    .map((line) => {
-      const trimmed = line.trim()
-
-      if (trimmed.startsWith('```')) {
-        isInFence = !isInFence
-        return line
-      }
-
-      if (isInFence) {
-        return line
-      }
-
-      return line.replace(
-        /!\[([^\]]*)\]\(([^)\s]+)\s*=\s*(\d+)x\)/g,
-        (_match, altText: string, src: string, width: string) => `![${altText}](${src} "${IMAGE_WIDTH_HINT_TITLE_PREFIX}${width}")`,
-      )
-    })
-    .join('\n')
+export function remarkImageWidthHint() {
+  return (tree: unknown) => {
+    visitImageNodes(tree as { children?: unknown[] })
+  }
 }
 
 export function parseImageWidthHint(title?: string | null) {
@@ -59,7 +40,7 @@ export const baseMarkdownComponents: Components = {
     const isImageOnly = nodes.length === 1 && isValidElement(nodes[0]) && nodes[0].type === 'img'
 
     if (isImageOnly) {
-      return <div className="my-3">{children}</div>
+      return <div className="my-1.5">{children}</div>
     }
 
     return <p className="leading-7">{children}</p>
@@ -150,6 +131,33 @@ export const baseMarkdownComponents: Components = {
       />
     )
   },
+}
+
+function visitImageNodes(node: { type?: string; children?: unknown[]; url?: string; title?: string; value?: string } | null | undefined) {
+  if (!node) {
+    return
+  }
+
+  if (node.type === 'image') {
+    const url = node.url?.trim() ?? ''
+    const widthMatch = /^(.*?)(?:\s*=\s*(\d+)x)\s*$/.exec(url)
+
+    if (widthMatch) {
+      node.url = widthMatch[1].trim()
+      node.title = `${IMAGE_WIDTH_HINT_TITLE_PREFIX}${widthMatch[2]}`
+      return
+    }
+
+    const titleMatch = /^\s*=\s*(\d+)x\s*$/.exec(node.title?.trim() ?? '')
+    if (titleMatch) {
+      node.title = `${IMAGE_WIDTH_HINT_TITLE_PREFIX}${titleMatch[1]}`
+    }
+    return
+  }
+
+  for (const child of node.children ?? []) {
+    visitImageNodes(child as { type?: string; children?: unknown[]; url?: string; title?: string; value?: string })
+  }
 }
 
 export function createNoteMarkdownComponents(tocItems: TocItem[]): Components {

@@ -4,7 +4,7 @@ import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import rehypePrettyCode from 'rehype-pretty-code';
 import { createHighlighter, createJavaScriptRegexEngine } from 'shiki';
-import { createNoteMarkdownComponents, normalizeNoteMarkdown, prettyCodeOptions } from '@/components/notes/noteMarkdown';
+import { createNoteMarkdownComponents, prettyCodeOptions, remarkImageWidthHint } from '@/components/notes/noteMarkdown';
 import { extractTocItemsFromMarkdown } from '@/components/notes/toc';
 
 const workerCompatiblePrettyCodeOptions = {
@@ -17,12 +17,11 @@ const workerCompatiblePrettyCodeOptions = {
 };
 
 export async function renderNoteContentToHtml(content: string) {
-  const normalizedContent = normalizeNoteMarkdown(content);
-  const tocItems = extractTocItemsFromMarkdown(normalizedContent);
+  const tocItems = extractTocItemsFromMarkdown(content);
   const components = createNoteMarkdownComponents(tocItems);
   const rendered = await MarkdownAsync({
-    children: normalizedContent,
-    remarkPlugins: [remarkGfm, remarkBreaks],
+    children: content,
+    remarkPlugins: [remarkGfm, remarkBreaks, remarkImageWidthHint],
     rehypePlugins: [[rehypePrettyCode, workerCompatiblePrettyCodeOptions]],
     components,
   });

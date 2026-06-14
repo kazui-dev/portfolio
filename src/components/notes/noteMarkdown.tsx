@@ -110,39 +110,25 @@ export const baseMarkdownComponents: Components = {
   img: ({ src, alt, title }) => {
     const width = parseImageWidthHint(title)
 
-    const imgElement = width ? (
-      <img
-        src={src}
-        alt={alt ?? ''}
-        loading="lazy"
-        className="block h-auto ml-0 mr-auto rounded-xl border border-slate-200 dark:border-slate-800 cursor-zoom-in"
-        style={{ width: '100%', maxWidth: `${width}px` }}
-        {...{ onclick: 'this.nextSibling.showModal()' }}
-      />
-    ) : (
-      <img
-        src={src}
-        alt={alt ?? ''}
-        loading="lazy"
-        className="block w-full max-w-[70%] sm:max-w-[45%] ml-0 mr-auto rounded-xl border border-slate-200 dark:border-slate-800 cursor-zoom-in"
-        {...{ onclick: 'this.nextSibling.showModal()' }}
-      />
-    )
+    if (width) {
+      return (
+        <img
+          src={src}
+          alt={alt ?? ''}
+          loading="lazy"
+          className="block h-auto ml-0 mr-auto rounded-xl border border-slate-200 dark:border-slate-800"
+          style={{ width: '100%', maxWidth: `${width}px` }}
+        />
+      )
+    }
 
     return (
-      <>
-        {imgElement}
-        <dialog
-          className="backdrop:bg-black/80 p-0 rounded-xl max-w-[95vw] max-h-[95vh] bg-transparent outline-none cursor-zoom-out"
-          {...{ onclick: 'this.close()' }}
-        >
-          <img
-            src={src}
-            alt={alt ?? ''}
-            className="max-w-full max-h-[95vh] w-auto h-auto object-contain rounded-xl"
-          />
-        </dialog>
-      </>
+      <img
+        src={src}
+        alt={alt ?? ''}
+        loading="lazy"
+        className="block w-full max-w-[70%] sm:max-w-[45%] ml-0 mr-auto rounded-xl border border-slate-200 dark:border-slate-800"
+      />
     )
   },
 }

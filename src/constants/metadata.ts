@@ -13,7 +13,7 @@ const SITE_NAME = "kazui.dev";
 
 export const PAGE_METADATA: Record<PageID, PageMetadata> = {
   home: {
-    title: `kazui.dev`,
+    title: `${SITE_NAME}`,
     ogTitle: `${SITE_NAME}`,
     ogDescription: `kazui's Portfolio`,
     description: `kazui's Portfolio`,
@@ -51,10 +51,10 @@ export const PAGE_METADATA: Record<PageID, PageMetadata> = {
     }
   },
   notes: {
-    title: `kazui's Notes`,
+    title: `Notes - ${SITE_NAME}`,
     ogTitle: `Notes - ${SITE_NAME}`,
-    ogDescription: `Notes - ${SITE_NAME}`,
-    description: `Notes - ${SITE_NAME}`,
+    ogDescription: `kazui's Notes`,
+    description: `kazui's Notes`,
     jsonLd: {
       "@context": "https://schema.org",
       "@graph": [

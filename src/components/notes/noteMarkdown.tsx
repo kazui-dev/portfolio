@@ -43,7 +43,7 @@ export const baseMarkdownComponents: Components = {
       return <div className="my-1.5">{children}</div>
     }
 
-    return <p className="leading-7">{children}</p>
+    return <p className="leading-7 [&>img+br]:hidden [&>img]:mb-3">{children}</p>
   },
   ul: ({ children }) => <ul className="list-disc pl-6 space-y-0.5">{children}</ul>,
   ol: ({ children }) => <ol className="list-decimal pl-6 space-y-0.5">{children}</ol>,

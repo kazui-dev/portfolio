@@ -43,7 +43,7 @@ export default function NoteArticle({
         </nav>
 
         {/* <header className="space-y-3 border-b border-slate-200 dark:border-slate-800 pb-6"> */}
-        <header className="space-y-3 pb-6">
+        <header className="space-y-3 pb-3">
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight wrap-break-words">
             {note.title}
           </h1>

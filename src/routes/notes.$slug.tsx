@@ -11,14 +11,14 @@ export const Route = createFileRoute('/notes/$slug')({
     return notePage
   },
   head: ({ loaderData }) => {
-    const title = `${loaderData?.note.title ?? 'Notes'} - kazui.dev`
+    const title = `${loaderData?.note.title ?? 'Notes'}`
     const ogImage = loaderData?.note.title
       ? `https://og.kazui.dev/notes/?title=${encodeURIComponent(loaderData.note.title)}`
       : undefined
 
     return {
       meta: [
-        { title },
+        { title: title },
         { name: 'description', content: '' },
         { property: 'og:title', content: title },
         { property: 'og:description', content: '' },

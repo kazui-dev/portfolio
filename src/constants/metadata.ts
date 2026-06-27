@@ -52,7 +52,7 @@ export const PAGE_METADATA: Record<PageID, PageMetadata> = {
   },
   notes: {
     title: `Notes - ${SITE_NAME}`,
-    ogTitle: `Notes`,
+    ogTitle: `Notes - ${SITE_NAME}`,
     ogDescription: `kazui's Notes`,
     description: `kazui's Notes`,
     jsonLd: {

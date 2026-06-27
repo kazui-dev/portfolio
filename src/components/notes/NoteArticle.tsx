@@ -75,9 +75,9 @@ export default function NoteArticle({
           </div>
         </header>
 
-        <div className="space-y-5 text-[15px] text-slate-700 dark:text-slate-200 leading-7 wrap-break-words">
+        {/* <div className="space-y-5 text-[15px] text-slate-700 dark:text-slate-200 leading-7 wrap-break-words">
           <div dangerouslySetInnerHTML={{ __html: renderedContentHtml }} />
-        </div>
+        </div> */}
 
         <footer className="pt-8 border-t border-slate-200 dark:border-slate-800">
           <div className="grid gap-3 sm:grid-cols-2">

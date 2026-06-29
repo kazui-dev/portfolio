@@ -17,7 +17,7 @@ export default function Home({ notes }: { notes: Note[] }) {
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight">
             Hi, I'm kazui
           </h1>
-          <p className="text-base sm:text-lg text-slate-700 dark:text-slate-200 leading-relaxed">
+          <p className="text-base text-slate-700 dark:text-slate-200 leading-relaxed">
             東京電機大学の情報システム工学科に通う学生です。<br />
             Web技術が好きで、フロントエンド開発やデザインに興味があります。
           </p>

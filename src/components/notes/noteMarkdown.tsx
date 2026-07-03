@@ -26,7 +26,7 @@ export function parseImageWidthHint(title?: string | null) {
 
 export const baseMarkdownComponents: Components = {
   h1: ({ children }) => (
-    <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-50 mt-10 first:mt-0 mb-4">
+    <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-zinc-300 mt-10 first:mt-0 mb-4">
       {children}
     </h1>
   ),
@@ -54,7 +54,7 @@ export const baseMarkdownComponents: Components = {
     return (
       <a
         href={href}
-        className="underline underline-offset-4 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white"
+        className="underline underline-offset-4 text-slate-700 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white"
         target={isExternal ? '_blank' : undefined}
         rel={isExternal ? 'noopener noreferrer' : undefined}
       >
@@ -78,7 +78,7 @@ export const baseMarkdownComponents: Components = {
     }
 
     return (
-      <code className="rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-sm text-slate-800 dark:text-slate-200">
+      <code className="rounded bg-slate-100 dark:bg-zinc-800 px-1.5 py-0.5 text-sm text-slate-800 dark:text-zinc-300">
         {children}
       </code>
     )
@@ -87,7 +87,7 @@ export const baseMarkdownComponents: Components = {
     <pre
       {...props}
       className={cn(
-        'overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-4 text-sm leading-6 [&_.line]:block',
+        'overflow-x-auto rounded-xl border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900 p-4 text-sm leading-6 [&_.line]:block',
         className,
       )}
     >
@@ -99,11 +99,11 @@ export const baseMarkdownComponents: Components = {
       <table className="w-full text-left text-sm border-collapse">{children}</table>
     </div>
   ),
-  thead: ({ children }) => <thead className="border-b border-slate-300 dark:border-slate-700">{children}</thead>,
-  th: ({ children }) => <th className="px-3 py-2 font-semibold text-slate-800 dark:text-slate-200">{children}</th>,
-  td: ({ children }) => <td className="px-3 py-2 border-t border-slate-200 dark:border-slate-800">{children}</td>,
+  thead: ({ children }) => <thead className="border-b border-slate-300 dark:border-zinc-700">{children}</thead>,
+  th: ({ children }) => <th className="px-3 py-2 font-semibold text-slate-800 dark:text-zinc-300">{children}</th>,
+  td: ({ children }) => <td className="px-3 py-2 border-t border-slate-200 dark:border-zinc-800">{children}</td>,
   blockquote: ({ children }) => (
-    <blockquote className="border-l-4 border-slate-300 dark:border-slate-700 pl-4 italic text-slate-600 dark:text-slate-400">
+    <blockquote className="border-l-4 border-slate-300 dark:border-zinc-700 pl-4 italic text-slate-600 dark:text-zinc-400">
       {children}
     </blockquote>
   ),
@@ -116,7 +116,7 @@ export const baseMarkdownComponents: Components = {
           src={src}
           alt={alt ?? ''}
           loading="lazy"
-          className="block h-auto ml-0 mr-auto rounded-xl border border-slate-200 dark:border-slate-800"
+          className="block h-auto ml-0 mr-auto rounded-xl border border-slate-200 dark:border-zinc-800"
           style={{ width: '100%', maxWidth: `${width}px` }}
         />
       )
@@ -127,7 +127,7 @@ export const baseMarkdownComponents: Components = {
         src={src}
         alt={alt ?? ''}
         loading="lazy"
-        className="block w-full max-w-[70%] sm:max-w-[45%] ml-0 mr-auto rounded-xl border border-slate-200 dark:border-slate-800"
+        className="block w-full max-w-[70%] sm:max-w-[45%] ml-0 mr-auto rounded-xl border border-slate-200 dark:border-zinc-800"
       />
     )
   },
@@ -180,7 +180,7 @@ export function createNoteMarkdownComponents(tocItems: TocItem[]): Components {
       return (
         <h2
           id={id}
-          className="scroll-mt-24 text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-50 mt-8 mb-3 border-b border-slate-200 dark:border-slate-700 pb-1"
+          className="scroll-mt-24 text-lg sm:text-xl font-bold text-slate-900 dark:text-zinc-300 mt-8 mb-3 border-b border-slate-200 dark:border-zinc-700 pb-1"
         >
           {children}
         </h2>
@@ -191,7 +191,7 @@ export function createNoteMarkdownComponents(tocItems: TocItem[]): Components {
       const id = getNextHeadingId(text)
 
       return (
-        <h3 id={id} className="scroll-mt-24 text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-50 mt-6 mb-2">
+        <h3 id={id} className="scroll-mt-24 text-base sm:text-lg font-semibold text-slate-900 dark:text-zinc-300 mt-6 mb-2">
           {children}
         </h3>
       )

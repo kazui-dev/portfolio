@@ -18,12 +18,12 @@ const XIcon = ({ className }: { className?: string }) => (
 
 export default function SocialLinks({ className }: SocialLinksProps) {
   return (
-    <div className={className ?? 'flex items-center gap-3 text-slate-400'}>
+    <div className={className ?? 'flex items-center gap-3 text-zinc-400'}>
       <a
         href="https://github.com/kazui-dev"
         target="_blank"
         rel="noopener noreferrer"
-        className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+        className="hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
         aria-label="GitHub"
       >
         <GithubIcon className="size-5" />
@@ -32,14 +32,14 @@ export default function SocialLinks({ className }: SocialLinksProps) {
         href="https://x.com/kazui_dev"
         target="_blank"
         rel="noopener noreferrer"
-        className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+        className="hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
         aria-label="X (Twitter)"
       >
         <XIcon className="size-4" />
       </a>
       <a
         href="mailto:contact@kazui.dev"
-        className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+        className="hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
         aria-label="Email"
       >
         <Mail className="size-5" />

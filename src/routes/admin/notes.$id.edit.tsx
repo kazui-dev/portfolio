@@ -17,12 +17,12 @@ const NoteEditor = lazy(() => import('@/components/admin/NoteEditor'));
 const previewComponents: Components = {
   ...baseMarkdownComponents,
   h2: ({ children }) => (
-    <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-50 mt-8 mb-3 border-b border-slate-200 dark:border-slate-700 pb-1">
+    <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-zinc-300 mt-8 mb-3 border-b border-slate-200 dark:border-zinc-700 pb-1">
       {children}
     </h2>
   ),
   h3: ({ children }) => (
-    <h3 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-50 mt-6 mb-2">
+    <h3 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-zinc-300 mt-6 mb-2">
       {children}
     </h3>
   ),
@@ -327,20 +327,20 @@ function RouteComponent() {
   };
 
   const inputClass =
-    'w-full rounded-md border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-sm text-slate-800 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-400 dark:focus:ring-slate-600';
+    'w-full rounded-md border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 px-3 py-2 text-sm text-slate-800 dark:text-zinc-300 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-400 dark:focus:ring-zinc-600';
 
   return (
     <div className="space-y-4">
-      <nav className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+      <nav className="flex items-center gap-2 text-sm text-slate-500 dark:text-zinc-400">
         <Link
           to="/admin/notes"
-          className="inline-flex items-center gap-1 hover:text-slate-800 dark:hover:text-slate-200 transition-colors"
+          className="inline-flex items-center gap-1 hover:text-slate-800 dark:hover:text-zinc-200 transition-colors"
         >
           <ChevronLeft size={14} />
           Admin Notes
         </Link>
         <span>/</span>
-        <span className="text-slate-700 dark:text-slate-300">
+        <span className="text-slate-700 dark:text-zinc-300">
           {isNew ? 'New Note' : (title || 'Edit')}
         </span>
       </nav>
@@ -382,23 +382,23 @@ function RouteComponent() {
         <button
           type="button"
           onClick={handleTogglePublished}
-          className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300"
+          className="flex items-center gap-2 text-sm text-slate-700 dark:text-zinc-300"
           aria-pressed={isPublished}
         >
           <span
             className={cn(
               'relative inline-flex h-5 w-9 items-center rounded-full transition-colors',
               isPublished
-                ? 'bg-slate-900 dark:bg-slate-100'
-                : 'bg-slate-200 dark:bg-slate-700',
+                ? 'bg-slate-900 dark:bg-zinc-100'
+                : 'bg-slate-200 dark:bg-zinc-700',
             )}
           >
             <span
               className={cn(
                 'inline-block h-3.5 w-3.5 transform rounded-full transition-transform',
                 isPublished
-                  ? 'translate-x-4 bg-white dark:bg-slate-900'
-                  : 'translate-x-1 bg-slate-500 dark:bg-slate-400',
+                  ? 'translate-x-4 bg-white dark:bg-zinc-900'
+                  : 'translate-x-1 bg-slate-500 dark:bg-zinc-400',
               )}
             />
           </span>
@@ -409,7 +409,7 @@ function RouteComponent() {
           onClick={() => isPublished && setIsUnlisted((v) => !v)}
           className={cn(
             'flex items-center gap-2 text-sm',
-            isPublished ? 'text-slate-700 dark:text-slate-300' : 'text-slate-400 dark:text-slate-600 cursor-not-allowed',
+            isPublished ? 'text-slate-700 dark:text-zinc-300' : 'text-slate-400 dark:text-zinc-600 cursor-not-allowed',
           )}
           aria-pressed={isUnlisted && isPublished}
           disabled={!isPublished}
@@ -418,16 +418,16 @@ function RouteComponent() {
             className={cn(
               'relative inline-flex h-5 w-9 items-center rounded-full transition-colors',
               isUnlisted && isPublished
-                ? 'bg-slate-700 dark:bg-slate-200'
-                : 'bg-slate-200 dark:bg-slate-700',
+                ? 'bg-slate-700 dark:bg-zinc-200'
+                : 'bg-slate-200 dark:bg-zinc-700',
             )}
           >
             <span
               className={cn(
                 'inline-block h-3.5 w-3.5 transform rounded-full transition-transform',
                 isUnlisted && isPublished
-                  ? 'translate-x-4 bg-white dark:bg-slate-900'
-                  : 'translate-x-1 bg-slate-500 dark:bg-slate-400',
+                  ? 'translate-x-4 bg-white dark:bg-zinc-900'
+                  : 'translate-x-1 bg-slate-500 dark:bg-zinc-400',
               )}
             />
           </span>
@@ -439,7 +439,7 @@ function RouteComponent() {
             href={`/notes/${slug}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 dark:hover:text-zinc-200 transition-colors"
           >
             <ExternalLink size={14} />
             View Page
@@ -450,7 +450,7 @@ function RouteComponent() {
           <button
             type="button"
             onClick={() => setShowOgPreview((v) => !v)}
-            className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 dark:hover:text-zinc-200 transition-colors"
           >
             <Image size={14} />
             OG Preview
@@ -475,7 +475,7 @@ function RouteComponent() {
             <span className="text-xs text-red-500 dark:text-red-400">{saveError}</span>
           )}
           {!saveError && savedOnce && !isSaving && (
-            <span className="text-xs text-slate-400 dark:text-slate-500">Saved</span>
+            <span className="text-xs text-slate-400 dark:text-zinc-500">Saved</span>
           )}
           {!isNew && (
             <Button variant="secondary" size="sm" onClick={handleDelete}>
@@ -508,7 +508,7 @@ function RouteComponent() {
         </DialogContent>
       </Dialog>
 
-      <div className="flex border-b border-slate-200 dark:border-slate-800 sm:hidden">
+      <div className="flex border-b border-slate-200 dark:border-zinc-800 sm:hidden">
         {(['editor', 'preview'] as const).map((pane) => (
           <button
             key={pane}
@@ -516,8 +516,8 @@ function RouteComponent() {
             className={cn(
               'px-4 py-2 text-sm capitalize transition-colors',
               activePane === pane
-                ? 'border-b-2 border-slate-900 dark:border-slate-100 font-medium text-slate-900 dark:text-slate-100'
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300',
+                ? 'border-b-2 border-slate-900 dark:border-zinc-100 font-medium text-slate-900 dark:text-zinc-300'
+                : 'text-slate-500 dark:text-zinc-400 hover:text-slate-700 dark:hover:text-zinc-300',
             )}
           >
             {pane}
@@ -528,13 +528,13 @@ function RouteComponent() {
       <div className="grid sm:grid-cols-2 gap-4 h-[calc(100vh-280px)] min-h-96">
         <div
           className={cn(
-            'h-full overflow-hidden border border-slate-200 dark:border-slate-800 rounded-xl',
+            'h-full overflow-hidden border border-slate-200 dark:border-zinc-800 rounded-xl',
             activePane !== 'editor' && 'hidden sm:block',
           )}
         >
           <Suspense
             fallback={
-              <div className="h-full animate-pulse bg-slate-100 dark:bg-slate-800" />
+              <div className="h-full animate-pulse bg-slate-100 dark:bg-zinc-800" />
             }
           >
             <NoteEditor
@@ -548,8 +548,8 @@ function RouteComponent() {
 
         <div
           className={cn(
-            'h-full overflow-y-auto border border-slate-200 dark:border-slate-800 rounded-xl p-5',
-            'space-y-5 text-[15px] text-slate-700 dark:text-slate-200 leading-7',
+            'h-full overflow-y-auto border border-slate-200 dark:border-zinc-800 rounded-xl p-5',
+            'space-y-5 text-[15px] text-slate-700 dark:text-zinc-300 leading-7',
             activePane !== 'preview' && 'hidden sm:block',
           )}
         >
@@ -562,7 +562,7 @@ function RouteComponent() {
               {content}
             </MarkdownHooks>
           ) : (
-            <p className="text-slate-400 dark:text-slate-600 text-sm">
+            <p className="text-slate-400 dark:text-zinc-600 text-sm">
               プレビューがここに表示されます。
             </p>
           )}

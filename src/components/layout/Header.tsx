@@ -8,11 +8,11 @@ import MobilePageNav from './MobilePageNav';
 
 export default function Header() {
   const navLink = cn(
-    'inline-flex items-center gap-1.5 px-1.5 py-1.5 border-b border-transparent text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 dark:focus-visible:ring-slate-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950'
+    'inline-flex items-center gap-1.5 px-1.5 py-1.5 border-b border-transparent text-sm font-medium text-slate-500 dark:text-zinc-400 hover:text-slate-800 dark:hover:text-zinc-200 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 dark:focus-visible:ring-zinc-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-zinc-950'
   );
 
   const navActive = cn(
-    '!text-slate-800 dark:!text-slate-100 !border-slate-500/55 dark:!border-slate-400/65'
+    '!text-slate-800 dark:!text-zinc-300 !border-slate-500/55 dark:!border-zinc-400/65'
   );
 
   const handleLogoClick = (event: MouseEvent<HTMLAnchorElement>) => {
@@ -23,13 +23,13 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-40 md:z-50 w-full bg-white/90 dark:bg-slate-950/90 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800 h-16 flex items-center">
+    <header className="sticky top-0 z-40 md:z-50 w-full bg-white/90 dark:bg-zinc-950/90 backdrop-blur-sm border-b border-slate-200 dark:border-zinc-800 h-16 flex items-center">
       <div className="mx-auto flex items-center justify-between gap-3 w-full px-4 sm:px-6 md:px-12 lg:px-14">
         <h1 className="shrink truncate flex-1">
           <Link
             to="/"
             onClick={handleLogoClick}
-            className="text-base sm:text-lg md:text-xl font-bold text-slate-800 dark:text-slate-200 hover:opacity-80 active:opacity-80 transition-opacity block"
+            className="text-base sm:text-lg md:text-xl font-bold text-slate-800 dark:text-zinc-300 hover:opacity-80 active:opacity-80 transition-opacity block"
           >
             kazui.dev
           </Link>
@@ -59,13 +59,13 @@ export default function Header() {
               </Link>
             </nav>
 
-            <span className="h-5 w-px bg-slate-200 dark:bg-slate-800" aria-hidden="true" />
+            <span className="h-5 w-px bg-slate-200 dark:bg-zinc-800" aria-hidden="true" />
 
             <ThemeSelector />
 
-            <span className="h-5 w-px bg-slate-200 dark:bg-slate-800" aria-hidden="true" />
+            <span className="h-5 w-px bg-slate-200 dark:bg-zinc-800" aria-hidden="true" />
 
-            <SocialLinks className="flex items-center gap-4 text-slate-400" />
+            <SocialLinks className="flex items-center gap-4 text-zinc-400" />
           </div>
 
           <div className="md:hidden">

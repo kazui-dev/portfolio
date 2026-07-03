@@ -46,7 +46,7 @@ function RootComponent() {
 
   return (
     <ThemeProvider>
-      <div className="min-h-screen flex flex-col bg-white dark:bg-slate-950">
+      <div className="min-h-screen flex flex-col bg-white dark:bg-zinc-950">
         {!isAdmin && <Header />}
         <main className="flex-1 w-full">
           <div className={cn(
@@ -72,7 +72,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       document.documentElement.classList.toggle('dark', isDark);
       document.getElementById('themeColorMeta')?.setAttribute(
         'content',
-        isDark ? '#0f172a' : '#ffffff'
+        isDark ? '#09090b' : '#ffffff'
       );
     })();
   `;
@@ -83,7 +83,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="min-h-screen bg-white dark:bg-slate-950 text-slate-800 dark:text-slate-50 selection:bg-slate-400/30 dark:selection:bg-slate-700/30 antialiased">
+      <body className="min-h-screen bg-white dark:bg-zinc-950 text-slate-800 dark:text-zinc-300 selection:bg-slate-400/30 dark:selection:bg-zinc-700/30 antialiased">
         {children}
         <Scripts />
       </body>

@@ -24,11 +24,11 @@ export default function NoteGrid({
         notes.map((note) => (
           <div
             key={note.id}
-            className="group relative flex flex-col justify-between p-4 sm:p-5 bg-white dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-sm transition-all h-full"
+            className="group relative flex flex-col justify-between p-4 sm:p-5 bg-white dark:bg-zinc-950 rounded-2xl border border-slate-200 dark:border-zinc-800 hover:border-slate-300 dark:hover:border-zinc-700 hover:shadow-sm transition-all h-full"
           >
             <div className="space-y-2 mb-4">
               <div className="flex items-center gap-1 flex-wrap">
-                <time className="text-[10px] sm:text-xs font-medium text-slate-500 dark:text-slate-400">
+                <time className="text-[10px] sm:text-xs font-medium text-slate-500 dark:text-zinc-400">
                   {note.publishedAt
                     ? note.publishedAt.toLocaleDateString('ja-JP').replace(/\//g, '.')
                     : '未公開'}
@@ -47,7 +47,7 @@ export default function NoteGrid({
                     </span>
                     {note.isUnlisted && note.isPublished && (
                       <span
-                        className="text-[9px] font-bold tracking-wider px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200"
+                        className="text-[9px] font-bold tracking-wider px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 dark:bg-zinc-700 dark:text-zinc-300"
                       >
                         Unlisted
                       </span>
@@ -56,12 +56,12 @@ export default function NoteGrid({
                 )}
                 {renderNoteActions?.(note)}
               </div>
-              <h2 className="text-sm sm:text-base font-bold text-slate-800 dark:text-slate-200 group-hover:text-slate-500 dark:group-hover:text-slate-400 transition-colors line-clamp-3">
+              <h2 className="text-sm sm:text-base font-bold text-slate-800 dark:text-zinc-300 group-hover:text-slate-500 dark:group-hover:text-zinc-400 transition-colors line-clamp-3">
                 {renderNoteLink(note, note.title)}
               </h2>
             </div>
 
-            <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-auto pt-3 border-t border-slate-100 dark:border-slate-800/50 relative z-10">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-auto pt-3 border-t border-slate-100 dark:border-zinc-800/50 relative z-10">
               {note.tags.map((tag) => {
                 const isSelected = currentTags.includes(tag);
                 return (
@@ -74,8 +74,8 @@ export default function NoteGrid({
                     className={cn(
                       'text-[10px] font-bold tracking-wider px-2 sm:px-2.5 py-0.5 rounded-full transition-colors focus:outline-none',
                       isSelected
-                        ? 'bg-slate-700 text-slate-50 hover:bg-slate-600 dark:bg-slate-200 dark:text-slate-900 dark:hover:bg-slate-300'
-                        : 'text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700',
+                        ? 'bg-slate-700 text-slate-50 hover:bg-slate-600 dark:bg-zinc-200 dark:text-zinc-900 dark:hover:bg-zinc-300'
+                        : 'text-slate-600 dark:text-zinc-300 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700',
                     )}
                   >
                     #{tag}
@@ -86,7 +86,7 @@ export default function NoteGrid({
           </div>
         ))
       ) : (
-        <div className="col-span-full py-16 text-center text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
+        <div className="col-span-full py-16 text-center text-slate-500 dark:text-zinc-400 bg-slate-50 dark:bg-zinc-900/50 rounded-2xl border border-dashed border-slate-200 dark:border-zinc-800">
           ノートが見つかりませんでした。
         </div>
       )}

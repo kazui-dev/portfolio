@@ -104,8 +104,8 @@ function RouteComponent() {
 
   return (
     <div className="w-full max-w-5xl mx-auto space-y-8">
-      <div className="border-b border-slate-200 dark:border-slate-800 pb-2 flex items-center justify-between gap-4">
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight">
+      <div className="border-b border-slate-200 dark:border-zinc-800 pb-2 flex items-center justify-between gap-4">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-zinc-300 tracking-tight">
           Admin Notes
         </h1>
         <Button asChild size="sm">
@@ -152,12 +152,12 @@ function RouteComponent() {
             {currentTags.map((t) => (
               <span
                 key={t}
-                className="inline-flex items-center gap-1 text-[10px] font-bold tracking-wider px-2.5 py-0.5 rounded-full bg-slate-700 text-slate-50 dark:bg-slate-200 dark:text-slate-900"
+                className="inline-flex items-center gap-1 text-[10px] font-bold tracking-wider px-2.5 py-0.5 rounded-full bg-slate-700 text-slate-50 dark:bg-zinc-200 dark:text-zinc-900"
               >
                 #{t}
                 <button
                   onClick={() => handleTagToggle(t)}
-                  className="ml-0.5 focus:outline-none hover:text-slate-300 dark:hover:text-slate-400 transition-colors"
+                  className="ml-0.5 focus:outline-none hover:text-slate-300 dark:hover:text-zinc-400 transition-colors"
                   aria-label={`Remove ${t} filter`}
                 >
                   <X size={12} />
@@ -188,7 +188,7 @@ function RouteComponent() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="relative z-10 inline-flex items-center gap-1 text-[10px] font-medium text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors"
+              className="relative z-10 inline-flex items-center gap-1 text-[10px] font-medium text-slate-500 hover:text-slate-700 dark:hover:text-zinc-300 transition-colors"
               aria-label="公開ページを開く"
             >
               <ExternalLink size={11} />
@@ -200,4 +200,3 @@ function RouteComponent() {
     </div>
   );
 }
-

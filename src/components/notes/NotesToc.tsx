@@ -16,7 +16,7 @@ function handleTocClick(event: React.MouseEvent<HTMLAnchorElement>, id: string) 
 }
 
 export default function NotesToc({ items }: { items: TocItem[] }) {
-  const linkClass = 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100'
+  const linkClass = 'text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-zinc-100'
 
   if (items.length === 0) {
     return null
@@ -24,8 +24,8 @@ export default function NotesToc({ items }: { items: TocItem[] }) {
 
   return (
     <aside className="hidden xl:block">
-      <div className="sticky top-32 rounded-lg border border-slate-200 dark:border-slate-800 p-6 bg-white dark:bg-slate-950">
-        <p className="text-xs font-semibold tracking-wider text-slate-500 dark:text-slate-400 mb-4">
+      <div className="sticky top-32 rounded-lg border border-slate-200 dark:border-zinc-800 p-6 bg-white dark:bg-zinc-950">
+        <p className="text-xs font-semibold tracking-wider text-slate-500 dark:text-zinc-400 mb-4">
           目次
         </p>
 
@@ -44,7 +44,7 @@ export default function NotesToc({ items }: { items: TocItem[] }) {
                 >
                   {item.level === 3 ? (
                     <span
-                      className="inline-block size-1.5 rounded-full bg-slate-400/80 dark:bg-slate-500/80"
+                      className="inline-block size-1.5 rounded-full bg-slate-400/80 dark:bg-zinc-500/80"
                       aria-hidden="true"
                     />
                   ) : null}

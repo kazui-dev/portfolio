@@ -88,7 +88,7 @@ export function Select({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "flex h-9 w-full items-center justify-between rounded-md border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-slate-400 dark:focus:ring-slate-600 disabled:cursor-not-allowed disabled:opacity-50",
+          "flex h-9 w-full items-center justify-between rounded-md border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 px-3 py-2 text-sm text-slate-700 dark:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-slate-400 dark:focus:ring-zinc-600 disabled:cursor-not-allowed disabled:opacity-50",
           className
         )}
       >
@@ -101,7 +101,7 @@ export function Select({
 
       <div 
         className={cn(
-          "absolute z-50 mt-1 max-h-60 w-full min-w-32 overflow-auto rounded-md border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-1 text-slate-700 dark:text-slate-200 shadow-md origin-top",
+          "absolute z-50 mt-1 max-h-60 w-full min-w-32 overflow-auto rounded-md border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-1 text-slate-700 dark:text-zinc-300 shadow-md origin-top",
           "transition-all duration-200 ease-out",
           isOpen 
             ? "opacity-100 visible scale-100 translate-y-0" 
@@ -110,8 +110,8 @@ export function Select({
           "[&::-webkit-scrollbar]:w-1.5",
           "[&::-webkit-scrollbar-track]:bg-transparent",
           "[&::-webkit-scrollbar-thumb]:rounded-full",
-          "[&::-webkit-scrollbar-thumb]:bg-slate-200 dark:[&::-webkit-scrollbar-thumb]:bg-slate-700",
-          "hover:[&::-webkit-scrollbar-thumb]:bg-slate-300 dark:hover:[&::-webkit-scrollbar-thumb]:bg-slate-600",
+          "[&::-webkit-scrollbar-thumb]:bg-slate-200 dark:[&::-webkit-scrollbar-thumb]:bg-zinc-700",
+          "hover:[&::-webkit-scrollbar-thumb]:bg-slate-300 dark:hover:[&::-webkit-scrollbar-thumb]:bg-zinc-600",
           "[direction:rtl]"
         )}
       >
@@ -128,14 +128,14 @@ export function Select({
               className={cn(
                 "[direction:ltr]",
                 "relative flex w-full cursor-pointer select-none items-center justify-between rounded-sm px-2 py-1.5 text-sm outline-none transition-colors",
-                "hover:bg-slate-100 dark:hover:bg-slate-800/50",
-                "focus-visible:bg-slate-100 dark:focus-visible:bg-slate-800/50",
-                isSelected && "font-medium text-slate-900 dark:text-slate-50"
+                "hover:bg-slate-100 dark:hover:bg-zinc-800/50",
+                "focus-visible:bg-slate-100 dark:focus-visible:bg-zinc-800/50",
+                isSelected && "font-medium text-slate-900 dark:text-zinc-300"
               )}
             >
               <span className="truncate">{option.label}</span>
               {isSelected && (
-                <Check className="h-4 w-4 shrink-0 text-slate-900 dark:text-slate-50 ml-2" />
+                <Check className="h-4 w-4 shrink-0 text-slate-900 dark:text-zinc-300 ml-2" />
               )}
             </button>
           );

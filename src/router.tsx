@@ -1,6 +1,7 @@
 import { createRouter } from '@tanstack/react-router'
 
 import { routeTree } from './routeTree.gen'
+import { getScrollRestorationKey } from './lib/scroll-restoration'
 
 export const getRouter = () => {
   const router = createRouter({
@@ -9,9 +10,7 @@ export const getRouter = () => {
 
     scrollRestoration: true,
     scrollRestorationBehavior: 'instant',
-    getScrollRestorationKey(location) {
-      return location.pathname + location.search;
-    },
+    getScrollRestorationKey,
     defaultPreloadStaleTime: 0,
     defaultPreload: 'intent',
     defaultNotFoundComponent: () => (

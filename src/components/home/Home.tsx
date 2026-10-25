@@ -1,3 +1,4 @@
+import { formatDate } from '@/lib/format-date';
 import { ArrowRight } from "lucide-react";
 import { Link, useNavigate } from '@tanstack/react-router';
 import type { Note } from '@/db/schema';
@@ -60,7 +61,7 @@ export default function Home({ notes }: { notes: Note[] }) {
               <div className="flex flex-wrap items-center gap-y-2">
                 <time className="text-sm font-medium text-slate-500 dark:text-zinc-400 w-24 shrink-0">
                   {note.publishedAt 
-                    ? note.publishedAt.toLocaleDateString('ja-JP').replace(/\//g, '.') 
+                    ? formatDate(note.publishedAt)
                     : '未公開'}   
                 </time>
                 <div className="flex flex-wrap gap-2 relative z-10">

@@ -1,3 +1,4 @@
+import { formatDate } from '@/lib/format-date';
 import { cn } from '@/lib/utils';
 import type { Note } from '@/db/schema';
 
@@ -30,7 +31,7 @@ export default function NoteGrid({
               <div className="flex items-center gap-1 flex-wrap">
                 <time className="text-[10px] sm:text-xs font-medium text-slate-500 dark:text-zinc-400">
                   {note.publishedAt
-                    ? note.publishedAt.toLocaleDateString('ja-JP').replace(/\//g, '.')
+                    ? formatDate(note.publishedAt)
                     : '未公開'}
                 </time>
                 {showStatus && (

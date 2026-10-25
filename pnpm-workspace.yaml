@@ -1,0 +1,9 @@
+packages:
+  - .
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+  - workerd
+overrides:
+  "solid-js>seroval": "1.6.3"
+  "@esbuild-kit/core-utils@3.3.2>esbuild": "0.25.12"

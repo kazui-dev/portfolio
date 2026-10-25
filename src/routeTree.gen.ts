@@ -9,18 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as NotesRouteImport } from './routes/notes'
-import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteRouteImport } from './routes/admin/route'
+import { Route as NotesRouteImport } from './routes/notes'
+import { Route as AdminNotesRouteImport } from './routes/admin/notes'
 import { Route as NotesIndexRouteImport } from './routes/notes.index'
 import { Route as NotesSlugRouteImport } from './routes/notes.$slug'
-import { Route as AdminNotesRouteImport } from './routes/admin/notes'
 import { Route as AdminNotesIndexRouteImport } from './routes/admin/notes.index'
 import { Route as AdminNotesIdEditRouteImport } from './routes/admin/notes.$id.edit'
 
-const NotesRoute = NotesRouteImport.update({
-  id: '/notes',
-  path: '/notes',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRouteRoute = AdminRouteRouteImport.update({
@@ -28,10 +28,15 @@ const AdminRouteRoute = AdminRouteRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const NotesRoute = NotesRouteImport.update({
+  id: '/notes',
+  path: '/notes',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminNotesRoute = AdminNotesRouteImport.update({
+  id: '/notes',
+  path: '/notes',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const NotesIndexRoute = NotesIndexRouteImport.update({
   id: '/',
@@ -42,11 +47,6 @@ const NotesSlugRoute = NotesSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => NotesRoute,
-} as any)
-const AdminNotesRoute = AdminNotesRouteImport.update({
-  id: '/notes',
-  path: '/notes',
-  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminNotesIndexRoute = AdminNotesIndexRouteImport.update({
   id: '/',
@@ -127,11 +127,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/notes': {
-      id: '/notes'
-      path: '/notes'
-      fullPath: '/notes'
-      preLoaderRoute: typeof NotesRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -141,12 +141,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/notes': {
+      id: '/notes'
+      path: '/notes'
+      fullPath: '/notes'
+      preLoaderRoute: typeof NotesRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/notes': {
+      id: '/admin/notes'
+      path: '/notes'
+      fullPath: '/admin/notes'
+      preLoaderRoute: typeof AdminNotesRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
     '/notes/': {
       id: '/notes/'
@@ -161,13 +168,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/notes/$slug'
       preLoaderRoute: typeof NotesSlugRouteImport
       parentRoute: typeof NotesRoute
-    }
-    '/admin/notes': {
-      id: '/admin/notes'
-      path: '/notes'
-      fullPath: '/admin/notes'
-      preLoaderRoute: typeof AdminNotesRouteImport
-      parentRoute: typeof AdminRouteRoute
     }
     '/admin/notes/': {
       id: '/admin/notes/'

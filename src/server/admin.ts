@@ -12,7 +12,7 @@ export const getAllNotes = createServerFn({ method: 'GET' })
   });
 
 export const getNoteById = createServerFn({ method: 'GET' })
-  .inputValidator((input: { id: string }) => input)
+  .validator((input: { id: string }) => input)
   .handler(async ({ data }) => {
     const db = getDb();
     const result = await db.select().from(notes).where(eq(notes.id, data.id)).limit(1);
@@ -20,7 +20,7 @@ export const getNoteById = createServerFn({ method: 'GET' })
   });
 
 export const upsertNote = createServerFn({ method: 'POST' })
-  .inputValidator((input: {
+  .validator((input: {
     id?: string;
     title: string;
     slug: string;
@@ -75,7 +75,7 @@ export const upsertNote = createServerFn({ method: 'POST' })
   });
 
 export const deleteNote = createServerFn({ method: 'POST' })
-  .inputValidator((input: { id: string }) => input)
+  .validator((input: { id: string }) => input)
   .handler(async ({ data }) => {
     const db = getDb();
     await db.delete(notes).where(eq(notes.id, data.id));
@@ -107,7 +107,7 @@ const ALLOWED_IMAGE_MIME_TYPES = new Set([
 ]);
 
 export const uploadNoteImage = createServerFn({ method: 'POST' })
-  .inputValidator((input: UploadNoteImageInput) => input)
+  .validator((input: UploadNoteImageInput) => input)
   .handler(async ({ data }) => {
     const storageEnv = env as unknown as R2ImagesEnv;
     const bucket = storageEnv.STORAGE;

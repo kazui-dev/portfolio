@@ -1,3 +1,4 @@
+import { formatDate } from '@/lib/format-date';
 import { useMemo } from 'react'
 import { Link } from '@tanstack/react-router'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -9,10 +10,6 @@ type NavigationNote = {
   slug: string
   title: string
   excerpt: string
-}
-
-function formatDate(date: Date) {
-  return date.toLocaleDateString('ja-JP').replace(/\//g, '.')
 }
 
 export default function NoteArticle({

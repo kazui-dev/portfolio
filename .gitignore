@@ -1,7 +1,8 @@
 node_modules
 docs
 .DS_Store
-.github
+.github/*
+!.github/dependabot.yml
 dist
 dist-ssr
 *.local

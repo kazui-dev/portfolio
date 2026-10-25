@@ -16,7 +16,7 @@ export const getPublishedNotes = createServerFn({ method: 'GET' })
   });
 
 export const getPublishedNoteBySlug = createServerFn({ method: 'GET' })
-  .inputValidator((input: { slug: string }) => input)
+  .validator((input: { slug: string }) => input)
   .handler(async ({ data }) => {
     const db = getDb();
     const result = await db.select()
@@ -27,7 +27,7 @@ export const getPublishedNoteBySlug = createServerFn({ method: 'GET' })
   });
 
 export const getPublishedNotePageBySlug = createServerFn({ method: 'GET' })
-  .inputValidator((input: { slug: string }) => input)
+  .validator((input: { slug: string }) => input)
   .handler(async ({ data }) => {
     const db = getDb();
     const result = await db.select()

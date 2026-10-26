@@ -7,7 +7,7 @@
     "deploy": "wrangler deploy --config wrangler.jsonc"
   },
   "dependencies": {
-    "@cf-wasm/resvg": "^0.3.5"
+    "@cf-wasm/resvg": "^0.4.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20261022.1",

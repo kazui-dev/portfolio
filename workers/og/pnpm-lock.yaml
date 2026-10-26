@@ -12,8 +12,8 @@ importers:
   .:
     dependencies:
       '@cf-wasm/resvg':
-        specifier: ^0.3.5
-        version: 0.3.5
+        specifier: ^0.4.0
+        version: 0.4.0
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^5.20261022.1
@@ -27,8 +27,8 @@ importers:
 
 packages:
 
-  '@cf-wasm/resvg@0.3.5':
-    resolution: {integrity: sha512-0dTZFR7AEVrnchNR68VLWg/AL64e42q7WkT4Dc6PxMCRjnPuWrqY3qu01bN/w31pXgPIJTvnNHnqtw9WbZCUEw==}
+  '@cf-wasm/resvg@0.4.0':
+    resolution: {integrity: sha512-p45IjI5EDYPTsJzhoqJ48f/TcNhR3/F9l2CCFomEHBJ0jbedQQMFB9CQfRaqcqdhDTNy4fSjN8hvOeKDMnz3zA==}
 
   '@cloudflare/kv-asset-handler@0.5.0':
     resolution: {integrity: sha512-jxQYkj8dSIzc0cD6cMMNdOc1UVjqSqu8BZdor5s8cGjW2I8BjODt/kWPVdY+u9zj3ms75Q5qaZgnxUad83+eAg==}
@@ -541,7 +541,7 @@ packages:
 
 snapshots:
 
-  '@cf-wasm/resvg@0.3.5':
+  '@cf-wasm/resvg@0.4.0':
     dependencies:
       '@resvg/resvg-wasm': 2.6.2
       '@resvg/resvg-wasm-legacy': '@resvg/resvg-wasm@2.4.1'
